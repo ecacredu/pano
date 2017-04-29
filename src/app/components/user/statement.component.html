@@ -1,0 +1,61 @@
+<div class="invoiceListOption">
+			<p class="search">
+				<input class="searchbox" [(ngModel)]="customSearch" type="text" name="name" value="" placeholder="Search">
+			</p>
+		</div>
+
+		<div class="" id="tab">
+
+
+		<div class="container-fluid tab">
+					<table class="table heading">
+						<thead>
+							<tr>
+								<th class="col-xs-2">DATE</th>
+								<th class="col-xs-2">TYPE</th>
+								<th class="col-xs-6">TRIP DESCRIPTION</th>
+								<th class="col-xs-2">POINTS</th>
+
+							</tr>
+						</thead>
+						</table>
+					<div class="container usertable">
+
+				<div class="row tablerow">
+
+							<table>
+									<tbody>
+										<tr *ngFor="let s of allStatements | search:customSearch">
+											<td class="col-xs-2">{{s.date}}</td>
+											<td class="col-xs-2">{{s.type}}</td>
+											<td class="col-xs-6">{{s.description}}</td>
+											<td class="col-xs-2">{{s.milage}}</td>
+
+										</tr>
+
+									</tbody>
+
+							</table>
+
+				</div>
+				</div>
+				</div>
+				</div>
+
+			<div class=" row totalcalculation">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 printbuttondiv">
+					<button class="printButton" (click)="printStatement()" type="button" name="button">Print your statement</button>
+				</div>
+
+				<div class="col-lg-5 col-md-5 col-sm-5 col-xs-5 key">
+					<span class="leftText">BALANCED:</span><br>
+					<span class="leftText">CLAIMED:</span><br>
+					<span class="leftText">REDEEMED:</span><br>
+				</div>
+				<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 value">
+					<span class="rightText">321</span><br>
+					<span class="rightText">244</span><br>
+					<span class="rightText">2324</span><br>
+				</div>
+
+			</div>

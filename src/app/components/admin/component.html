@@ -1,0 +1,39 @@
+<div class="PageBody">
+  <div class="menubar">
+    	<div class="logo">
+    		<img src="assets/img/whitelogo.png" alt="" />
+    	</div>
+    	<div class="navBar">
+    		<ul>
+    			<li *ngIf="!adminMask"><button type="button" [routerLink]="['/admin/dashboard']" [ngClass]="{'is-active': dashboardActive}" name="button">DASHBOARD</button></li>
+    			<li *ngIf="!adminMask"><button type="button" [routerLink]="['/admin/users']" [ngClass]="{'is-active': usersActive}" name="button">USER</button></li>
+    			<li *ngIf="!adminMask"><button type="button" [routerLink]="['/admin/invoice']" [ngClass]="{'is-active': invoiceActive}" name="button">INVOICE</button></li>
+    			<li *ngIf="!adminMask"><button type="button" [routerLink]="['/admin/offer']" [ngClass]="{'is-active': offerActive}" name="button">OFFER</button></li>
+    			<li *ngIf="!adminMask"><button type="button" [routerLink]="['/admin/account']" [ngClass]="{'is-active': accountActive}" name="button">ACCOUNT</button></li>
+
+          <li *ngIf="adminMask"><button type="button" [routerLink]="['/admin/account/user/dashboard']" [ngClass]="{'is-active': AccountdashboardActive}" name="button">DASHBOARD</button></li>
+    			<li *ngIf="adminMask"><button type="button" [routerLink]="['/admin/account/user/statement']" [ngClass]="{'is-active': AccountstatementActive}" name="button">STATEMENT</button></li>
+    			<li *ngIf="adminMask"><button type="button" [routerLink]="['/admin/account/user/redeem']" [ngClass]="{'is-active': AccountredeemActive}" name="button">REDEEM</button></li>
+          <li *ngIf="adminMask"><button type="button" *ngIf="maskDetails.id != undefined && maskDetails.roles['4'] == undefined && maskDetails.roles['5'] != undefined" [routerLink]="['/admin/account/user/employees']" [ngClass]="{'is-active': AccountemployeeActive}" name="button">EMPLOYEES</button></li>
+          </ul>
+      </div>
+  </div>
+  <div class="topMenu">
+		<div class="buttons">
+			<button class="myaccount" [routerLink]="['/admin/account']"  type="button" name="button">Admin account</button>
+			<button class="logout" type="button" (click)="logmeout()" name="button">Log Out</button>
+		</div>
+		<div class="titlefield">
+			<p class="title">
+				{{routeTitle}}
+			</p>
+			<p class="emailId">
+				{{activeUser.mail}}<br>
+        <span *ngIf="adminMask && maskDetails.id != undefined">User Account : {{maskDetails.mail}}</span>
+			</p>
+		</div>
+	</div>
+  <div class="container-fluid main">
+    <router-outlet></router-outlet>
+  </div>
+</div>

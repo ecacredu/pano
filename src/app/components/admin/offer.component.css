@@ -1,0 +1,161 @@
+* {
+    margin: 0;
+    padding: 0
+}
+html, body {
+    width: 100%;
+    height: 100%
+}
+.row {
+    height: 100%
+}
+.row .leftDiv {
+    height: 90%;
+    margin-top: 4%
+}
+
+.row .leftDiv p,.row .rightDiv p{
+    color:red;
+    text-align: left;
+}
+.row .leftDiv h3 {
+    margin-left: 10%
+}
+.row .leftDiv .EmailForm {
+    width: 80%;
+    margin-left: 10%;
+    margin-top: 1%;
+    height: 90%
+}
+.row .leftDiv .EmailForm .ReceiverTextField {
+    outline: none;
+    border: 0;
+    border: 2px solid black;
+    border-radius: 7px;
+    width: 60%;
+    line-height: 2em;
+    padding-left: 10px
+}
+.row .leftDiv .EmailForm .Subject {
+    outline: none;
+    border: 0;
+    border: 2px solid black;
+    border-radius: 7px;
+    width: 60%;
+    line-height: 2em;
+    margin-top: 5%;
+    padding-left: 10px
+}
+.row .leftDiv .EmailForm .EmailMessage {
+    outline: none;
+    border: 0;
+    border: 2px solid black;
+    border-radius: 7px;
+    margin-top: 5%;
+    width: 85%;
+    height: 48%;
+    padding-left: 10px
+}
+.row .leftDiv .EmailForm .Sendbutton {
+    outline: none;
+    float: right;
+    margin-right: 15%;
+    border: 0;
+    color: white;
+    background-color: #ff6600;
+    line-height: 1.7em;
+    width: 19%;
+    border-radius: 5px;
+    margin-top: 3%
+}
+.row .leftDiv .EmailForm .BOOSTbutton {
+    outline: none;
+    float: right;
+    margin-right: 15%;
+    line-height: 1.5em;
+    width: 26%;
+    border: 0;
+    border-radius: 7px;
+    background-color: #ff3300;
+    color: white;
+    font-size: 160%;
+    margin-top: 3%
+}
+.row .rightDiv {
+    height: 80%;
+    margin-top: 4%;
+    border-left: 1px solid black
+}
+.row .rightDiv h3 {
+    margin-left: 10%
+}
+.row .rightDiv .SmsForm {
+    width: 80%;
+    margin-left: 10%;
+    margin-top: 1%;
+    height: 90%
+}
+.row .rightDiv .SmsForm h6 {
+    font-size: 155%;
+    float: left;
+    margin-top: 0.65%
+}
+.row .rightDiv .SmsForm .receiverNumber {
+    outline: none;
+    margin-left: 1%;
+    border: 0;
+    border: 2px solid black;
+    border-radius: 7px;
+    width: 48%;
+    line-height: 1em;
+    font-size: 153%;
+    padding-left: 10px
+}
+.row .rightDiv .SmsForm .SmsMessage {
+    padding-left: 10px;
+    outline: none;
+    border: 0;
+    border: 2px solid black;
+    border-radius: 7px;
+    margin-top: 4%;
+    width: 85%;
+    height: 48%
+}
+.row .rightDiv .SmsForm .Sendbutton {
+    padding-left: 10px;
+    outline: none;
+    float: right;
+    margin-right: 15%;
+    border: 0;
+    color: white;
+    background-color: #ff6600;
+    line-height: 1.7em;
+    width: 19%;
+    border-radius: 5px;
+    margin-top: 3%
+}
+.row .rightDiv .SmsForm .BOOSTbutton {
+    outline: none;
+    float: right;
+    margin-right: 15%;
+    line-height: 1.5em;
+    width: 26%;
+    border: 0;
+    border-radius: 7px;
+    background-color: #ff3300;
+    color: white;
+    font-size: 160%;
+    margin-top: 3%
+}
+.row .rightDiv .SmsForm .receiverNumber::-webkit-input-placeholder, .row .rightDiv .SmsForm .SmsMessage::-webkit-input-placeholder {
+    font-size: 14px
+}
+.row .rightDiv .SmsForm .receiverNumber:-moz-placeholder, .row .rightDiv .SmsForm .SmsMessage:-moz-placeholder {
+    font-size: 14px
+}
+.row .rightDiv .SmsForm .receiverNumber::-moz-placeholder, .row .rightDiv .SmsForm .SmsMessage::-moz-placeholder {
+    font-size: 14px
+}
+.row .rightDiv .SmsForm .receiverNumber:-ms-input-placeholder, .row .rightDiv .SmsForm .SmsMessage:-ms-input-placeholder {
+    font-size: 14px
+}

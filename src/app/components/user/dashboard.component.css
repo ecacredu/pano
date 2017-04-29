@@ -1,0 +1,71 @@
+.totalpoints .key {
+    margin-left: 5%;
+    margin-top: 2%;
+    text-align: left
+}
+.totalpoints .key .leftText {
+    line-height: 3;
+    font-size: 140%
+}
+.totalpoints .value {
+    margin-top: 2%;
+    text-align: right
+}
+.totalpoints .value .rightText {
+    line-height: 3;
+    font-size: 140%
+}
+.termsandcondition {
+    margin-top: 7%
+}
+.termsandcondition .leftDiv .Steps {
+    font-weight: 600;
+    font-size: 100%;
+    margin-top: 4%;
+    margin-left: 9%
+}
+.termsandcondition .leftDiv .step1 {
+    margin-top: 5%;
+    margin-left: 9%;
+    font-size: 85%;
+    font-weight: 800
+}
+.termsandcondition .leftDiv .stepinfo {
+    margin-left: 9%;
+    text-align: justify;
+    margin-right: 6%;
+    font-size: 85%;
+    font-weight: 600;
+    margin-top: 1%
+}
+.termsandcondition .leftDiv .step2 {
+    margin-top: 7%;
+    margin-left: 9%;
+    font-size: 85%;
+    font-weight: 800
+}
+.termsandcondition .rightDiv {
+    height: auto;
+    border-left: 2px solid black;
+    margin-top: 3%
+}
+.termsandcondition .rightDiv .step3 {
+    font-size: 85%;
+    font-weight: 800;
+    margin-top: 7%;
+    margin-left: 9%
+}
+.termsandcondition .rightDiv .step4 {
+    font-size: 85%;
+    font-weight: 800;
+    margin-top: 7%;
+    margin-left: 9%
+}
+.termsandcondition .rightDiv .stepinfo {
+    margin-left: 9%;
+    text-align: justify;
+    margin-right: 6%;
+    font-size: 85%;
+    font-weight: 600;
+    margin-top: 1%
+}

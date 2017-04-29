@@ -1,0 +1,35 @@
+<div class="row">
+			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 leftDiv">
+				<form class="EmailForm" (ngSubmit)="onSendOfferMail()" [formGroup]="sendEmailForm">
+					<input class="Subject" type="text" formControlName="offermail" id="offermail" placeholder="Your Mail id"><br>
+					<div class="error" *ngIf="sendEmailForm.controls.offermail.touched && !sendEmailForm.controls.offermail.valid">
+						 <p *ngIf="sendEmailForm.controls.offermail.errors.required">
+								* Mail ID is required.
+						 </p>
+						 <p *ngIf="!sendEmailForm.controls.offermail.isEmail">
+								* Mail ID entered is invalid.
+						 </p>
+					</div>
+					<input class="Subject" type="text" formControlName="offersubject" id="offersubject" placeholder="Subject"><br>
+					<p class="error" *ngIf="sendEmailForm.controls.offersubject.touched && !sendEmailForm.controls.offersubject.valid">
+						* Subject is required
+					</p>
+
+
+					<textarea class="QueryMessage"  formControlName="offermessage" id="offermessage" rows="8" cols="40" placeholder="Your Query"></textarea><br>
+					<p class="error" *ngIf="sendEmailForm.controls.offermessage.touched && !sendEmailForm.controls.offermessage.valid">
+						* Email Body is required
+					</p><br>
+					<button class="Sendbutton" [disabled]="!sendEmailForm.controls.offermail.valid || !sendEmailForm.controls.offersubject.valid || !sendEmailForm.controls.offermessage.valid"  type="submit" name="button">Send</button><br><br>
+				</form>
+			</div>
+			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 rightDiv">
+				<p class="infopanorama">info@panoramatravel.co.in</p>
+				<p class="supportpanorama">support@panoramatravel.co.in</p>
+				<p class="youcancall">You can call us at</p>
+				<p class="phoneno">022-27888618</p>
+				<p class="">022-27888619</p>
+			</div>
+
+		</div>
+<ng2-toasty></ng2-toasty>

@@ -1,0 +1,75 @@
+<div class="row">
+	<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 leftDiv">
+		<div class="row usersheading">
+			<p>
+				USERS
+			</p>
+		</div>
+		<div class="row info">
+			<div class="col-lg-5 col-md-5 col-sm-5 col-xs-5 key">
+				<span class="leftText">TOTAL USERS:</span><br>
+				<span class="leftText">TOTAL REDEEMED:</span><br>
+				<span class="leftText">TOTAL CLAIMS:</span><br>
+				<span class="leftText">TOTAL BALANCE:</span><br>
+			</div>
+			<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 value">
+				<span class="rightText">{{userInfo.total || 0}}</span><br>
+				<span class="rightText">{{invoiceInfo.redeemed || 0}}</span><br>
+				<span class="rightText">{{userInfo.float || 0}}</span><br>
+				<span class="rightText">{{userInfo.balance || 0}}</span><br>
+			</div>
+
+		</div>
+		<div class="row invoiceheading">
+			<div class="line">
+
+			</div>
+			<p>
+				INVOICE
+			</p>
+		</div>
+		<div class="row invoiceinfo">
+			<div class="col-lg-5 col-md-5 col-sm-5 col-xs-5 key">
+				<span class="leftText">TOTAL INVOICES:</span><br>
+				<span class="leftText">TOTAL INVOICE COST:</span><br>
+				<span class="leftText">TOTAL REDEEMED:</span><br>
+				<span class="leftText">TOTAL CANCELLED:</span><br>
+			</div>
+			<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 value">
+				<span class="rightText">{{invoiceInfo.total || 0}}</span><br>
+				<span class="rightText">{{invoiceInfo.cost || 0}}</span><br>
+				<span class="rightText">{{invoiceInfo.redeemed || 0}}</span><br>
+				<span class="rightText">{{invoiceInfo.cancelled || 0}}</span><br>
+			</div>
+		</div>
+		<div class="row endingline">
+			<div class="line">
+
+			</div>
+		</div>
+
+
+
+
+	</div>
+	<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 rightDiv">
+		<div class="row milage">
+			<p class="milagepercent">Milage Percent</p>
+
+			<div class="milageForm">
+				<input class="points" [(ngModel)]="newmilage" type="text" name="name" value=""><br>
+				<button class="pointstobesubmit" type="button" (click)="updateMil(newmilage)" name="button">CHANGE</button>
+			</div>
+
+			<p class="thirdline">
+			</p>
+			<p class="currentMilage">Current Milage</p>
+			 <p class="pointspercent">{{milage.percent}}%</p>
+		</div>
+
+
+
+	</div>
+
+</div>
+<ng2-toasty></ng2-toasty>

@@ -1,0 +1,224 @@
+<div class="invoiceListOption">
+			<p class="search">
+				<input class="searchbox" [(ngModel)]="customSearch" type="text" value="" placeholder="Search">
+			</p>
+			<p class="add" style="margin-right: 28%;max-width: 50px;">
+				<button class="addbutton" (click)="refresInvoices()" name="button"><i class="fa fa-refresh" aria-hidden="true"></i> Refresh</button>
+			</p>
+			<p class="add">
+				<button class="addbutton" (click)="openForm()" type="button" name="button">ADD</button>
+			</p>
+		</div>
+
+
+
+<div class="container-fluid tab">
+	<table class="table heading">
+		<thead>
+			<tr>
+				<th class="col-xs-1">INVOICE ID</th>
+				<th class="col-xs-1">U.No</th>
+				<th class="col-xs-3">INVOICE DESCRIPTION</th>
+				<th class="col-xs-2">DATE</th>
+				<th class="col-xs-1">COST</th>
+				<th class="col-xs-2">STATUS</th>
+				<th class="col-xs-2">EDIT/DELETE</th>
+			</tr>
+		</thead>
+		</table>
+	<div class="container invoicetable">
+
+<div class="row tablerow">
+
+			<table>
+					<tbody>
+						<tr *ngFor="let invoice of AllInvoices | search:customSearch">
+							<td class="col-xs-1">{{invoice.title}}</td>
+							<td class="col-xs-1">{{invoice.booked_by}}</td>
+							<td class="col-xs-3">{{invoice.description}}</td>
+							<td class="col-xs-2" [innerHTML]="invoice.journey_date"></td>
+							<td class="col-xs-1">{{invoice.net_invoice_amount}}</td>
+							<td class="col-xs-2">{{invoice.status}}</td>
+							<td class="col-xs-2"><i (click)="openAutoFil(invoice)" class="fa fa-pencil-square-o edit" aria-hidden="true"></i> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-trash-o deleteicon" (click)="deleteInvoice(invoice.nid)" aria-hidden="true"></i></td>
+						</tr>
+					</tbody>
+
+			</table>
+
+</div>
+</div>
+</div>
+
+
+			<div class="row totalcalculation">
+				<div class=" col-lg-9 col-md-9 col-sm-9 col-xs-9 key">
+					<span class="leftText">TOTAL INVOICES:</span><br>
+					<span class="leftText">TOTAL INVOICE COST:</span><br>
+					<span class="leftText">TOTAL REDEEMED:</span><br>
+					<span class="leftText">TOTAL CANCELLED:</span><br>
+				</div>
+				<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 value">
+					<span class="rightText">{{invoiceInfo.total || 0}}</span><br>
+					<span class="rightText">{{invoiceInfo.cost || 0}}</span><br>
+					<span class="rightText">{{invoiceInfo.redeemed || 0}}</span><br>
+					<span class="rightText">{{invoiceInfo.cancelled || 0}}</span><br>
+				</div>
+
+			</div>
+			<ng2-toasty></ng2-toasty>
+			<!-- Modal -->
+				  <div  bsModal #lgModal="bs-modal" class="modal fade mpdalDiv" id="myModal"tabindex="-1" role="dialog" aria-hidden="true" >
+				    <!-- <div class="modal-dialog actualDiv"> -->
+
+				      <!-- Modal content-->
+				      <div class="modal-content content">
+				        <div class="modal-header header">
+				          <button  type="button" class="close closeButton" (click)="lgModal.hide()">&times;</button>
+				          <h4 class="modal-title">ADD INVOICE</h4>
+				        </div>
+				        <div class="modal-body modalBody">
+									<form class=""  (ngSubmit)="onAddInvoiceSubmit($event)" [formGroup]="addInvoiceForm">
+										<hr class="style">
+									<div class="row formrow">
+
+										<div class="col-lg-6 col-sm-6 col-md-6 col-xs-6 leftcol">
+											<p class="labels">
+												STATUS
+											</p>
+											<ng-select  [allowClear]="false"
+											            [items]="status"
+																	[active]="[status[0]]"
+											              (selected)="selected($event,'status')"
+											              (removed)="removed($event,'status')"
+											            [disabled]="false"
+											            placeholder="No status selected">
+											</ng-select>
+											<p class="labels lp">
+												INVOICE ID
+											</p>
+											<input class="inputtext" [(ngModel)]="invoiceid" [ngModelOptions]="{standalone: true}" type="text" value="">
+											<!-- <p class="error" *ngIf="addInvoiceForm.controls.invoiceid.touched">
+									      * Invoice id is required
+									    </p> -->
+											<p class="labels lp">
+												DESCRIPTION
+											</p>
+											<textarea [(ngModel)]="description" [ngModelOptions]="{standalone: true}"  ></textarea>
+											<!-- <p class="error" *ngIf="addInvoiceForm.controls.description.touched && !addInvoiceForm.controls.description.valid">
+									      * Description id is required
+									    </p> -->
+											<p class="labels lp">
+												INVOICE FILE
+											</p >
+											<input class="inputtext"  accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document" style="border:none;" type="file" (change)="changeListener($event)" value="">
+										</div>
+										<div class="col-lg-6 col-sm-6 col-md-6 col-xs-6 rightcol">
+											<p class="labels">
+												FROM
+											</p>
+											<input class="inputtext" [(ngModel)]="from" [ngModelOptions]="{standalone: true}" type="text" value="">
+											<!-- <p class="error" *ngIf="addInvoiceForm.controls.from.touched && !addInvoiceForm.controls.from.valid">
+									      * Field required
+									    </p> -->
+											<p class="labels lp">
+												TO
+											</p>
+											<input class="inputtext" [(ngModel)]="to" [ngModelOptions]="{standalone: true}" type="text" value="">
+											<!-- <p class="error" *ngIf="addInvoiceForm.controls.to.touched && !addInvoiceForm.controls.to.valid">
+									      * Field required
+									    </p> -->
+											<p class="labels lp">
+												DATE
+											</p>
+											<button type="button" style="margin-left: 18%;" class="glyphicon glyphicon-calendar btn btn-sm btn-default btn-secondary datebutton" (click)="toggleOnDatePicker()"> {{(onDateDay.length && onDateMonth.length && onDateYear.length)? (onDateDay +'-'+ onDateMonth +'-'+ onDateYear):'Select Journey Date'}}</button>
+									    <div *ngIf="showOnDatePicker && onDate" class= "datepicker">
+									      <datepicker [(ngModel)]="onDate" (ngModelChange)="onDateChange($event)" [ngModelOptions]="{standalone: true}" [showWeeks]="true"></datepicker>
+									    </div>
+											<p class="labels lp">
+												FOR
+											</p>
+											<ng-select #forselect [allowClear]="false"
+											            [items]="bookingfor"
+											              (selected)="selected($event,'bookingfor')"
+											              (removed)="removed($event,'bookingfor')"
+											            [disabled]="false"
+											            placeholder="Journey for">
+											</ng-select>
+											<p class="labels lp">
+												SEATS
+											</p>
+											<input [(ngModel)]="seats" [ngModelOptions]="{standalone: true}" class="inputtext" type="number" value="">
+											<!-- <p class="error" *ngIf="addInvoiceForm.controls.seats.touched && !addInvoiceForm.controls.seats.valid">
+									      * Field required
+									    </p> -->
+										</div>
+									</div>
+									<hr *ngIf="updateIn==false" class="style_2">
+									<div *ngIf="updateIn==false" class="row formrow2">
+										<div class="col-lg-6 col-sm-6 col-md-6 col-xs-6 leftcol">
+											<p class="labels lp">
+												UNIQUE NO
+											</p>
+											<input class="inputtext" [ngModel]="selecteduid" (ngModelChange)="selectuid($event)" [ngModelOptions]="{standalone: true}" type="text" value="">
+									</div>
+									<div class="col-lg-6 col-sm-6 col-md-6 col-xs-6 rightcol">
+										<p class="labels lp">
+											CO-ORDINATOR
+										</p>
+										<ng-select *ngIf="updateIn==false"  #cordselect [allowClear]="false"
+																[items]="allcoords"
+																	(selected)="selected($event,'allcoords')"
+																	(removed)="removed($event,'allcoords')"
+																[disabled]="disabled"
+																placeholder="Select a co-ordinator">
+										</ng-select>
+									</div>
+								</div>
+								<hr  *ngIf="updateIn==false" class="style_3">
+								<p  *ngIf="updateIn==false" class="labelscordinator lp">
+									COST
+								</p>
+								<input  *ngIf="updateIn==false" [disabled]="addInvoiceSelectedUser == undefined || selectedCord == undefined" [ngModel]="invoicecost" (ngModelChange)="oncostchange($event)" [ngModelOptions]="{standalone: true}" class="inputtextcordinator" type="text" value=""><br>
+								<div class="row formrow3">
+									<div class="col-lg-5 col-sm-5 col-md-5 col-xs-5 key">
+										<p>
+											INVOICE COST
+										</p>
+										<p *ngIf="updateIn==false">
+											MILAGE TO BE REDEEMED
+										</p>
+										<p *ngIf="updateIn==true">
+											MILAGE REDEEMED
+										</p>
+										<p>
+											NEW INVOICE AMOUNT
+										</p>
+									</div>
+									<div class="col-lg-4 col-sm-4 col-md-4 col-xs-4 rightcol">
+										<p>
+											{{invoicecost || 0}}
+										</p>
+										<p *ngIf="updateIn==false">
+											{{floattoredeem || 0}}
+										</p>
+										<p *ngIf="updateIn==true">
+											{{updateredeemed || 0}}
+										</p>
+										<p>
+											{{netinvoicecost || 0}}
+										</p>
+									</div>
+								</div>
+
+								<button type="submit" class="submitButton">Save</button>
+
+									</form>
+
+								</div>
+
+
+
+								</div>
+
+				      </div>
+<!-- [disabled]="!addInvoiceForm.controls.invoiceid.valid || !addInvoiceForm.controls.description.valid || !addInvoiceForm.controls.seats.valid || !addInvoiceForm.controls.to.valid || !addInvoiceForm.controls.from.valid" -->

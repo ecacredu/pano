@@ -1,0 +1,83 @@
+.loginPage {
+    width: 100%;
+    height: 100%;
+    background-image: url("assets/img/background.jpg");
+    background-size: 100% 100%;
+    padding: 0;
+}
+.loginPage .content {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    min-height: 30%;
+    top: 6%
+}
+.loginPage .content .logoImage {
+    width: 14.935%;
+    position: absolute;
+    left: 42.5325%
+}
+.loginPage .content .logoImage img {
+    width: 100%
+}
+.loginPage .content p {
+    text-align: center;
+    font-size: 420%;
+    color: white;
+    margin-top: 10%
+}
+.loginPage .content .formDiv {
+    text-align: center;
+    margin-top: 1.9%
+}
+.loginPage .content .formDiv input {
+    padding: 0.55%;
+    padding-left: 1.2%;
+    width: 24%;
+    margin-top: 2.2%;
+    background-color: #333333;
+    color: white;
+    font-size: 21px;
+    border: 0;
+    border-radius: 8px;
+    outline: none
+}
+.loginPage .content .formDiv input::-webkit-input-placeholder {
+    color: #d8d8d8
+}
+.loginPage .content .formDiv input:-moz-placeholder {
+    color: #d8d8d8
+}
+.loginPage .content .formDiv input::-moz-placeholder {
+    color: #d8d8d8
+}
+.loginPage .content .formDiv input:-ms-input-placeholder {
+    color: #d8d8d8
+}
+.loginPage .content .formDiv button {
+    margin-top: 2.2%;
+    outline: none;
+    width: 24%;
+    padding: 0.55%;
+    background-color: #ff6600;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    text-align: center;
+    font-size: 21px
+}
+.loginPage .content .leftText {
+    text-align: center;
+    color: white;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 12px
+}
+.loginPage .content .rightText {
+    text-align: center;
+    color: white;
+    margin-left: 8%;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 12px
+}

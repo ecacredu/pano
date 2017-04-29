@@ -1,0 +1,374 @@
+
+.pageBody {
+    width: 100%;
+    height: 100%
+}
+.pageBody .container-fluid {
+    padding: 0px
+}
+.pageBody .menu {
+    z-index: 99;
+    width: 52.9%;
+    right: 4%;
+    position: fixed;
+    top: 2.9%
+}
+.pageBody .menu #navline {
+    width: 91%;
+    height: 2px;
+    right: 3%;
+    background-color: rgba(0, 0, 0, 0.5);
+    position: absolute
+}
+.pageBody .menu nav {
+    height: 10.7em;
+    background-color: rgba(0, 0, 0, 0.8);
+    position: absolute;
+    width: 100%;
+    border-radius: 35px;
+    text-align: center
+}
+.pageBody .menu nav .lidiv {
+    margin: 0;
+    padding: 0;
+    line-height: 5.2em;
+    width: 89%;
+    margin-left: 4%
+}
+.pageBody .menu nav .lidiv a {
+    outline: none;
+    text-decoration: none;
+    color: #E79A26;
+    line-height: 75px;
+    font-size: 89%;
+    font-weight: 700;
+    padding: 7%;
+    padding-top: 5%;
+    padding-bottom: 5%
+}
+.pageBody .menu button {
+    outline: none;
+    width: 5.2em;
+    height: 5.2em;
+    border: 4px solid #E79924;
+    background: black none repeat scroll 0% 0%;
+    background-image: url("./assets/img/menu.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    right: 2.4%;
+    border-radius: 50%;
+    padding-top: 0%;
+    position: fixed
+}
+.pageBody .menu button {
+    -webkit-transition: -webkit-transform 0.85s ease-in-out;
+    transition: transform 0.85s ease-in-out
+}
+.pageBody .menu .rotate {
+    transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    -o-transform: rotate(180deg)
+}
+.pageBody .main {
+    width: 100%;
+    height: 136%;
+    background-size: cover;
+    background-repeat: no-repeat
+}
+ks-swiper-container{
+    height: 100%;
+    width: 100%;
+    position: absolute;
+}
+
+.pageBody .main .logoImage {
+    width: 14%;
+    position: absolute;
+    left: 3.5%;
+    z-index: 2;
+}
+.dubaiCircle {
+    width: 32%;
+    position: absolute;
+    top: 48%;
+    left: 4.6%
+}
+.pageBody .sect {
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-attachment: fixed
+}
+.pageBody .rewardsPoint {
+    width: 100%;
+    height: 50%
+}
+.pageBody .rewardsPoint .education {
+    width: 50%;
+    height: 100%;
+    float: left;
+    text-align: center
+}
+.pageBody .rewardsPoint .education img {
+    width: 30%;
+    margin-top: 7%
+}
+.pageBody .rewardsPoint .education p {
+    width: 100%;
+    margin: 0px;
+    font-size: 155%;
+    margin-top: 1%
+}
+.pageBody .rewardsPoint .reward {
+    width: 50%;
+    height: 100%;
+    float: left;
+    cursor:pointer;
+    text-align: center
+}
+.pageBody .rewardsPoint .reward img {
+    width: 30%;
+    margin-top: 7%
+}
+.pageBody .rewardsPoint .reward p {
+    margin: 0px;
+    font-size: 155%;
+    margin-top: 1%
+}
+.pageBody .services {
+    width: 100%;
+    background-image: url("./assets/img/golden.jpg")
+}
+.pageBody .services img {
+    width: 30%;
+    margin-top: 8%;
+    margin-left: 6%
+}
+.pageBody .services .serviceBox {
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 15px;
+    margin-left: 10%;
+    padding: 0;
+    margin-top: 2%;
+    margin-bottom: 8%
+}
+.pageBody .services .serviceBox button {
+    outline: none;
+    width: 40%;
+    float: left;
+    background-color: transparent;
+    border: 0px;
+    border-radius: 15px;
+    color: white;
+    text-align: left
+}
+.pageBody .services .serviceBox button .icon {
+    float: left;
+    margin: 1.1em
+}
+.pageBody .services .serviceBox button .icon .fontDiv {
+    color: black;
+    width: 3.5em;
+    height: 3.5em;
+    border-radius: 50%;
+    background-color: yellow;
+    text-align: center;
+    margin: 4%
+}
+.pageBody .services .serviceBox button .icon .fontDiv i {
+    margin-top: 13%;
+    font-size: 2.5em
+}
+.pageBody .services .serviceBox button .icon .fontDiv .smallIcon {
+    font-size: 1.7em;
+    margin-top: 0.5em;
+    padding: 0
+}
+.pageBody .services .serviceBox button .Terms {
+    line-height: 600%
+}
+.pageBody .services .serviceBox button .Terms .text {
+    font-size: 162%
+}
+.pageBody .services .serviceBox button .Terms .text p {
+    line-height: 0;
+    font-size: 60%;
+    bottom: 7em;
+    right: 0.7em;
+    margin-left: 5.5em;
+    margin-top: -1.5em
+}
+.pageBody .services .serviceBox .odd {
+    width: 60%
+}
+.pageBody .aboutUs {
+    width: 100%;
+    background-image: url("./assets/img/night.jpeg")
+}
+.pageBody .aboutUs img {
+    float: left;
+    width: 30%;
+    margin-top: 8%;
+    margin-left: 8%
+}
+.pageBody .aboutUs .aboutUsContent {
+    background-color: rgba(0, 0, 0, 0.7);
+    width: 58%;
+    color: white;
+    margin-top: 23%;
+    float: left;
+    text-align: justify;
+    border-radius: 15px;
+    font-size: 150%;
+    margin-bottom: 8%
+}
+.pageBody .aboutUs .aboutUsContent p {
+    margin: 0px;
+    padding: 4%
+}
+.pageBody .ContactUs {
+    width: 100%;
+    background-image: url("./assets/img/cold.jpg")
+}
+.pageBody .ContactUs img {
+    float: left;
+    width: 30%;
+    margin-top: 8%;
+    margin-left: 8%
+}
+.pageBody .ContactUs .MapDiv {
+    float: left;
+    width: 58%;
+    margin-top: 11%;
+    border-radius: 15px
+}
+.pageBody .ContactUs .MapDiv .google {
+    width: 58%;
+    height: 370px;
+    border-radius: 15px;
+    position: absolute
+}
+.pageBody .ContactUs .contactUsContent {
+    background-color: rgba(0, 0, 0, 0.7);
+    width: 58%;
+    float: right;
+    margin-right: 4%;
+    border-radius: 15px;
+    margin-top: 30%;
+    color: white;
+    margin-bottom: 4%;
+    font-size: 175%
+}
+.pageBody .ContactUs .contactUsContent p {
+    margin: 0px;
+    padding: 4%
+}
+@media (max-width: 1314px) {
+    .pageBody .services .serviceBox button .icon {
+        margin: 1.2em
+    }
+    .pageBody .services .serviceBox button .Terms .text {
+        font-size: 150%
+    }
+    .pageBody .services .serviceBox button .Terms .text p {
+        font-size: 55%
+    }
+}
+@media (max-width: 1270px) {
+    .pageBody .menu nav .lidiv {
+        width: 85%
+    }
+    .pageBody .menu nav .lidiv a {
+        padding: 5%;
+        padding-top: 5%;
+        padding-bottom: 5%
+    }
+    .pageBody .ContactUs .contactUsContent {
+        margin-top: 17.8em;
+        font-size: 165%
+    }
+}
+@media (max-width: 1014px) {
+    .pageBody .services .serviceBox {
+        width: 65%
+    }
+    .pageBody .services .serviceBox button {
+        width: 100%
+    }
+    .pageBody .services .serviceBox .odd {
+        width: 100%
+    }
+}
+@media (max-width: 960px) {
+    .pageBody .menu nav .lidiv {
+        width: 85%
+    }
+    .pageBody .menu nav .lidiv a {
+        padding: 3%;
+        padding-top: 6%;
+        padding-bottom: 6%;
+        font-size: 80%
+    }
+    .pageBody .menu button {
+        width: 4.5em;
+        height: 4.5em
+    }
+}
+#yourElement {
+  -webkit-animation-duration: 3s;
+          animation-duration: 3s;
+  -webkit-animation-delay: 5s;
+          animation-delay: 5s;
+  -webkit-animation-iteration-count: infinite;
+          animation-iteration-count: infinite;
+-ms-animation-iteration-count: infinite;
+-ms-animation-duration: 3s;
+ -ms-animation-delay: 5s;
+-moz-animation-iteration-count: infinite;
+-moz-animation-duration: 3s;
+ -moz-animation-delay: 5s;
+}
+
+.contactUsContent{
+    padding: 5px;
+}
+
+.contactList{
+    list-style-type: none;
+    margin: 20px;
+    margin-bottom: 0;
+}
+
+.contactList li {
+    margin-bottom: 10px;
+}
+
+.contactList li:last-child{
+    margin-bottom: 0;
+}
+
+.contactList li i,.contactList li p{
+        display: inline-block;
+}
+.contactList li i{
+    vertical-align: top;
+    background-color: #4683D4;
+    color: black;
+    padding:0px;
+    border-radius: 30px;
+width: 60px;
+text-align: center;
+padding-top: 14px;
+height: 60px;
+font-size: 28px;
+}
+
+.contactList li p{
+        padding-top: 0 !important;
+        width:90% !important;
+}
+
+.contactList li::last-child p{
+    padding-bottom: 0 !important;
+}

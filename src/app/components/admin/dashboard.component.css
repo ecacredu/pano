@@ -1,0 +1,126 @@
+.row .leftDiv {
+    height: 100%
+}
+.row .leftDiv .usersheading {
+    margin-top: 10%;
+    height: auto
+}
+.row .leftDiv .usersheading p {
+    text-align: center;
+    font-size: 215%;
+    border-bottom: 1px solid black;
+    line-height: 2;
+    width: 34%;
+    margin-left: 33%
+}
+.row .leftDiv .info {
+    height: auto;
+    margin-top: 3%
+}
+.row .leftDiv .info .key {
+    text-align: right;
+    margin-left: 9%
+}
+.row .leftDiv .info .key .leftText {
+    line-height: 1.7
+}
+.row .leftDiv .info .value {
+    text-align: right
+}
+.row .leftDiv .info .value .rightText {
+    line-height: 1.7
+}
+.row .leftDiv .invoiceheading {
+    margin-top: 3%;
+    height: auto
+}
+.row .leftDiv .invoiceheading .line {
+    height: 1px;
+    background-color: black;
+    width: 34%;
+    margin-left: 33%
+}
+.row .leftDiv .invoiceheading p {
+    text-align: center;
+    font-size: 215%;
+    border-bottom: 1px solid black;
+    line-height: 2;
+    width: 34%;
+    margin-left: 33%;
+    margin-top: 7%
+}
+.row .leftDiv .invoiceinfo {
+    height: auto;
+    margin-top: 3%
+}
+.row .leftDiv .invoiceinfo .key {
+    text-align: right;
+    margin-left: 9%
+}
+.row .leftDiv .invoiceinfo .key .leftText {
+    line-height: 1.7
+}
+.row .leftDiv .invoiceinfo .value {
+    text-align: right
+}
+.row .leftDiv .invoiceinfo .value .rightText {
+    line-height: 1.7
+}
+.row .leftDiv .endingline {
+    margin-top: 3%;
+    height: auto
+}
+.row .leftDiv .endingline .line {
+    height: 1px;
+    background-color: black;
+    width: 34%;
+    margin-left: 33%
+}
+.row .rightDiv {
+    height: 72%;
+    margin-top: 6%;
+    border-left: 1px solid black
+}
+.row .rightDiv .milage {
+    height: 100%;
+    text-align: center
+}
+.row .rightDiv .milage .milagepercent {
+    margin-top: 4%;
+    font-size: 133%
+}
+.row .rightDiv .milage .milageForm .points {
+    outline: none;
+    margin-top: 8%;
+    width: 20%;
+    border: 1px solid black;
+    border-radius: 7px;
+    font-size: 120%;
+    line-height: 1.6;
+    text-align: center
+}
+.row .rightDiv .milage .milageForm .pointstobesubmit {
+    outline: none;
+    margin-top: 1.5%;
+    border: 0;
+    background-color: #FF6600;
+    color: white;
+    width: 15%;
+    border-radius: 5px;
+    line-height: 1.7em
+}
+.row .rightDiv .milage .thirdline {
+    width: 40%;
+    height: 1px;
+    margin-top: 11%;
+    background-color: black;
+    margin-left: 30%
+}
+.row .rightDiv .milage .currentMilage {
+    font-size: 133%;
+    margin-top: 8%
+}
+.row .rightDiv .milage .pointspercent {
+    margin-top: 1%;
+    font-size: 500%
+}

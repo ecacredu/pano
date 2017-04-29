@@ -1,0 +1,43 @@
+* {
+    margin: 0;
+    padding: 0
+}
+html, body {
+    width: 100%;
+    height: 100%
+}
+.accountContent {
+    margin-top: 18%;
+    text-align: center;
+}
+.accountContent .accountno {
+    border: none;
+    border: 3px solid black;
+    width: 50%;
+    line-height: 2.8;
+    border-radius: 10px;
+    outline: none
+}
+.accountContent .accountno::-webkit-input-placeholder {
+    font-size: 150%
+}
+.accountContent .accountno:-moz-placeholder {
+    font-size: 150%
+}
+.accountContent .accountno::-moz-placeholder {
+    font-size: 150%
+}
+.accountContent .accountno:-ms-input-placeholder {
+    font-size: 150%
+}
+.accountContent .enter {
+    outline: none;
+    border: 0;
+    background-color: #FF6600;
+    color: white;
+    font-size: 196%;
+    width: 14%;
+    line-height: 1.4em;
+    border-radius: 10px;
+    margin-top: 0.5%
+}

@@ -1,0 +1,18 @@
+<div class="container-fluid loginPage">
+	<div class="content">
+		<div class="logoImage">
+			<img src="assets/img/login.png" alt="" />
+		</div>
+		<p>
+			Welcome User
+		</p>
+		<form class="formDiv" (ngSubmit)="onLoginSubmit()" [formGroup]="myForm">
+			<input type="text" formControlName="username" id="username" placeholder="Username"><br>
+			<input type="password" formControlName="password" id="password" placeholder="Password"><br>
+			<button type="submit" [disabled]="!myForm.controls.username.valid || !myForm.controls.password.valid" name="button">log in</button>
+		</form>
+		<span class="leftText">Request an account</span>
+		<span class="rightText">Forgot password?</span>
+	</div>
+
+</div>

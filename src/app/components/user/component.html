@@ -1,0 +1,33 @@
+<div class="PageBody">
+  <div class="menubar">
+    	<div class="logo">
+    		<img src="img/whitelogo.png" alt="" />
+    	</div>
+    	<div class="navBar">
+    		<ul>
+    			<li><button type="button" [routerLink]="['/user/dashboard']" [ngClass]="{'is-active': dashboardActive}" name="button">DASHBOARD</button></li>
+    			<li><button type="button" [routerLink]="['/user/statement']" [ngClass]="{'is-active': statementActive}" name="button">STATEMENT</button></li>
+    			<li><button type="button" [routerLink]="['/user/redeem']" [ngClass]="{'is-active': redeemActive}" name="button">REDEEM</button></li>
+    			<li><button type="button" [routerLink]="['/user/contact']" [ngClass]="{'is-active': contactActive}" name="button">CONTACT</button></li>
+          <li><button type="button" *ngIf="activeUser.roles['5'] != undefined && activeUser.roles['4'] == undefined" [routerLink]="['/user/employees']" [ngClass]="{'is-active': employeeActive}" name="button">EMPLOYEES</button></li>
+        </ul>
+    	</div>
+  </div>
+  <div class="topMenu">
+		<div class="buttons">
+			<!--<button class="myaccount"*ngIf="activeUser.roles['5'] != undefined && activeUser.roles['4'] == undefined" type="button" name="button">Admin Panel</button>-->
+			<button class="logout" type="button" (click)="logmeout()" name="button">Log Out</button>
+		</div>
+		<div class="titlefield">
+			<p class="title">
+				{{routeTitle}}
+			</p>
+			<p class="emailId">
+				{{activeUser.mail}}
+			</p>
+		</div>
+	</div>
+  <div class="container-fluid main">
+    <router-outlet></router-outlet>
+  </div>
+</div>

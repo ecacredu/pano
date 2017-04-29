@@ -2,6 +2,10 @@ const { root } = require('./helpers');
 
 const { AotPlugin } = require('@ngtools/webpack');
 
+var CopyWebpackPlugin = require('copy-webpack-plugin');
+
+var path = require('path');
+
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const ScriptExtPlugin = require('script-ext-html-webpack-plugin');
@@ -23,6 +27,9 @@ module.exports = {
     }),
     new ScriptExtPlugin({
       defaultAttribute: 'defer'
-    })
+    }),
+    new CopyWebpackPlugin([
+      { from: './src/assets/' , to:'assets/' }
+    ])
   ]
 };

@@ -1,0 +1,107 @@
+* {
+    margin: 0;
+    padding: 0
+}
+html, body {
+    width: 100%;
+    height: 100%
+}
+
+.showmilage {
+    height: 80%
+}
+.showmilage .leftDiv {
+    height: 90%;
+    margin-top: 4%;
+    text-align: center;
+    border-right: 1px solid black
+}
+.showmilage .leftDiv .withdrawpoints {
+    font-size: 135%;
+    margin-top: 5%
+}
+.showmilage .leftDiv .availabePoints {
+    font-size: 130%;
+    margin-top: 5%
+}
+.showmilage .leftDiv .PointToBeClaimed {
+    font-size: 130%;
+    margin-top: 5%
+}
+.showmilage .leftDiv .pointsInDigits {
+    margin-top: 1%;
+    font-size: 225%
+}
+.showmilage .leftDiv .enterPoints {
+    outline: none;
+    border: 0;
+    border: 2px solid #999999;
+    margin-top: 1%;
+    border-radius: 7px;
+    height: 9%
+}
+.showmilage .leftDiv .withdrawButton {
+    outline: none;
+    margin-top: 3%;
+    border: 0;
+    background-color: #019900;
+    color: white;
+    border-radius: 5px;
+    width: 22%;
+    line-height: 2em
+}
+.showmilage .rightDiv {
+    height: 90%;
+    margin-top: 4%;
+    text-align: center
+}
+.showmilage .rightDiv .withdrawpoints {
+    font-size: 135%;
+    margin-top: 5%
+}
+.showmilage .rightDiv .availabePoints {
+    font-size: 130%;
+    margin-top: 5%
+}
+.showmilage .rightDiv .PointToBeClaimed {
+    font-size: 130%;
+    margin-top: 5%
+}
+.showmilage .rightDiv .pointsInDigits {
+    margin-top: 1%;
+    font-size: 225%
+}
+.showmilage .rightDiv .enterPoints {
+    outline: none;
+    border: 0;
+    border: 2px solid #999999;
+    margin-top: 1%;
+    border-radius: 7px;
+    height: 9%
+}
+.showmilage .rightDiv .cancelButton {
+    outline: none;
+    margin-top: 3%;
+    border: 0;
+    background-color: #CC0001;
+    color: white;
+    border-radius: 5px;
+    width: 22%;
+    line-height: 2em
+}
+.totalcalculation {
+    margin-top: 2%
+}
+.totalcalculation .key {
+    margin-left: 6%;
+    text-align: right
+}
+.totalcalculation .key .leftText {
+    line-height: 1.5
+}
+.totalcalculation .value {
+    text-align: right
+}
+.totalcalculation .value .rightText {
+    line-height: 1.5
+}

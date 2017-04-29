@@ -1,0 +1,64 @@
+<div class="row">
+			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 leftDiv">
+				<h3>Send E Mail</h3>
+				<form class="EmailForm" (ngSubmit)="onSendOfferMail('No')" [formGroup]="sendEmailForm">
+					<input class="ReceiverTextField" type="text" formControlName="offermail" id="offermail" placeholder="To: Receiver"><br>
+					<div class="error" *ngIf="sendEmailForm.controls.offermail.touched && !sendEmailForm.controls.offermail.valid">
+						 <br>
+						 <p *ngIf="sendEmailForm.controls.offermail.errors.required">
+								* Mail ID is required.
+						 </p>
+						 <p *ngIf="!sendEmailForm.controls.offermail.isEmail">
+								* Mail ID entered is invalid.
+						 </p>
+					</div>
+
+					<input class="Subject" type="text" formControlName="offersubject" id="offersubject" placeholder="Subject"><br>
+					<br>
+					<p class="error" *ngIf="sendEmailForm.controls.offersubject.touched && !sendEmailForm.controls.offersubject.valid">
+						* Subject is required
+					</p>
+
+
+					<textarea class="EmailMessage"  formControlName="offermessage" id="offermessage" rows="8" cols="40" placeholder="Your Message"></textarea><br>
+					<br>
+					<p class="error" *ngIf="sendEmailForm.controls.offermessage.touched && !sendEmailForm.controls.offermessage.valid">
+						* Email Body is required
+					</p>
+
+
+
+					<button class="Sendbutton" type="submit" [disabled]="!sendEmailForm.controls.offermail.valid || !sendEmailForm.controls.offersubject.valid || !sendEmailForm.controls.offermessage.valid" name="button">Send</button><br><br>
+					<button class="BOOSTbutton" [disabled]="!sendEmailForm.controls.offermail.valid || !sendEmailForm.controls.offersubject.valid || !sendEmailForm.controls.offermessage.valid" (click)="onSendOfferMail('Yes')" type="button" name="button">BOOST</button>
+
+				</form>
+			</div>
+			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 rightDiv">
+				<h3>Send SMS</h3>
+				<form class="SmsForm" (ngSubmit)="onSendOfferSms('No')" [formGroup]="sendSmsForm">
+					<h6>+91</h6><input class="receiverNumber" type="text" formControlName="smsnumber" id="smsnumber" placeholder="Receiver's Number"><br>
+					<br>
+					<div class="error" *ngIf="sendSmsForm.controls.smsnumber.touched && !sendSmsForm.controls.smsnumber.valid">
+						 <p *ngIf="sendSmsForm.controls.smsnumber.errors.required">
+								* Mobile Number is required.
+						 </p>
+						 <p *ngIf="!sendSmsForm.controls.smsnumber.isContact">
+								* Mobile Number entered is invalid.
+						 </p>
+					</div>
+
+
+					<textarea class="SmsMessage"  formControlName="smsmessage" id="smsmessage" rows="8" cols="40" placeholder="Your Message"></textarea><br>
+					<br>
+					<p class="error" *ngIf="sendSmsForm.controls.smsmessage.touched && !sendSmsForm.controls.smsmessage.valid">
+						* SMS Body is required
+					</p>
+
+					<button class="Sendbutton" [disabled]="!sendSmsForm.controls.smsmessage.valid || !sendSmsForm.controls.smsnumber.valid" type="submit" name="button">Send</button><br><br>
+					<button class="BOOSTbutton" [disabled]="!sendSmsForm.controls.smsmessage.valid || !sendSmsForm.controls.smsnumber.valid" (click)="onSendOfferSms('Yes')" type="button" name="button">BOOST</button>
+				</form>
+			</div>
+
+		</div>
+
+		<ng2-toasty></ng2-toasty>

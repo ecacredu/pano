@@ -1,4 +1,21 @@
 export const ROUTES: string[] = [
   '/',
-  '/lazy'
+  '/login',
+  '/lazy',
+  '/admin',
+  '/admin/dashboard',
+  '/admin/users',
+  '/admin/invoice',
+  '/admin/offer',
+  '/admin/account',
+  '/admin/account/user/dashboard',
+  '/admin/account/user/statement',
+  '/admin/account/user/redeem',
+  '/admin/account/user/employees',
+  '/user',
+  '/user/dashboard',
+  '/user/statement',
+  '/user/redeem',
+  '/user/contact',
+  '/user/employees',
 ];

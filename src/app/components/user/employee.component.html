@@ -1,0 +1,210 @@
+<div class="invoiceListOption">
+			<p class="search">
+				<input class="searchbox" [(ngModel)]="customSearch" type="text" name="name" value="" placeholder="Search">
+			</p>
+			<p class="add">
+				<button class="addbutton" (click)="openForm()"  type="button" name="button">ADD</button>
+			</p>
+		</div>
+
+
+
+		<div class="container-fluid tab">
+		<table class="table heading">
+			<thead>
+				<tr>
+					<th class="col-xs-2">NAME</th>
+					<th class="col-xs-4">DESIGNATION</th>
+					<th class="col-xs-2">PHONE</th>
+					<th class="col-xs-2">E MAIL</th>
+					<th class="col-xs-2">ACTION</th>
+				</tr>
+			</thead>
+			</table>
+		<div class="container usertable">
+
+	<div class="row tablerow">
+
+				<table>
+						<tbody>
+							<tr *ngFor="let e of allCords | search:customSearch">
+								<td class="col-xs-2">{{e.text}}</td>
+								<td class="col-xs-4">{{e.designation}}</td>
+								<td class="col-xs-2">{{e.mobile_number}}</td>
+								<td class="col-xs-2">{{e.co_email}}</td>
+								<td class="col-xs-2"><i class="fa fa-pencil-square-o edit" (click)="openAutoForm(e)" aria-hidden="true"></i> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i (click)="deleteCord(e.id)" class="fa fa-trash-o deleteicon" aria-hidden="true"></i></td>
+							</tr>
+						</tbody>
+
+				</table>
+
+	</div>
+	</div>
+	</div>
+	<ng2-toasty></ng2-toasty>
+
+	<!-- Modal -->
+			<div bsModal #lgModal="bs-modal" class="modal fade mpdalDiv" id="myModal"  tabindex="-1" role="dialog" aria-hidden="true">
+				<!-- <div class="modal-dialog actualDiv"> -->
+
+					<!-- Modal content-->
+					<div class="modal-content content">
+						<div class="modal-header header">
+							<button  type="button" class="close closeButton"  (click)="lgModal.hide()">&times;</button>
+							<h4 class="modal-title">ADD USER</h4>
+						</div>
+						<div class="modal-body modalBody">
+							<form class="" (ngSubmit)="onAddUserSubmit(addUserForm.value)" [formGroup]="addUserForm">
+
+							<hr class="style_2">
+							<div class="row formrow2">
+								<div class="col-lg-6 col-sm-6 col-md-6 col-xs-6 leftcol">
+									<p class="labels lp">
+										COMPANY NAME
+									</p>
+									<input class="inputtext" type="text" [(ngModel)]="fname" [ngModelOptions]="{standalone: true}" id="fname" placeholder=""><br>
+									<!-- <p class="error" *ngIf="addUserForm.controls.fname.touched && !addUserForm.controls.fname.valid">
+										* COMPANY NAME is required
+									</p> -->
+									<p class="labels lp">
+										NAME LINE 2
+									</p>
+									<input class="inputtext" type="text" [(ngModel)]="lname" [ngModelOptions]="{standalone: true}" id="lname" placeholder="">
+									<p class="labels lp">
+										MOBILE NUMBER
+									</p>
+									<input class="inputtext" type="text" [(ngModel)]="mobile" [ngModelOptions]="{standalone: true}" id="mobile" placeholder="">
+									<!-- <div class="error" *ngIf="addUserForm.controls.mobile.touched && !addUserForm.controls.mobile.valid">
+										 <p *ngIf="addUserForm.controls.mobile.errors.required">
+												* Mobile Number is required.
+										 </p>
+										 <p *ngIf="!addUserForm.controls.mobile.isContact">
+												* Mobile Number entered is invalid.
+										 </p>
+									</div> -->
+									<p class="labels lp">
+										BIRTHDAY
+									</p>
+									<button type="button" class="glyphicon glyphicon-calendar btn btn-sm btn-default btn-secondary datebutton" (click)="toggleBirthDatePicker()"> {{(birthDay.length && birthMonth.length && birthYear.length)? (birthDay +'-'+ birthMonth +'-'+ birthYear):'Select Birthday'}}</button>
+									<div *ngIf="showBirthDatePicker" class= "datepicker">
+										<datepicker [(ngModel)]="Bdt" (ngModelChange)="onBirthChange($event)" [ngModelOptions]="{standalone: true}" [minDate]="minDate" [showWeeks]="true"></datepicker>
+									</div>
+									<p class="labels lp">
+										MARITAL STATUS
+									</p>
+									<div class="btn-group">
+										<label class="btn btn-primary" [(ngModel)]="maritalstatus" [ngModelOptions]="{standalone: true}" btnRadio="Unmarried"
+												 >Unmarried</label>
+										<label class="btn btn-primary" [(ngModel)]="maritalstatus" [ngModelOptions]="{standalone: true}" btnRadio="Married"
+													 >Married</label>
+									 <label class="btn btn-primary" [(ngModel)]="maritalstatus" [ngModelOptions]="{standalone: true}" btnRadio="Other"
+													>Other</label>
+								</div>
+
+								<p class="labels lp">
+									Designation
+								</p>
+								<input class="inputtext" type="text" [(ngModel)]="designation" [ngModelOptions]="{standalone: true}" placeholder="">
+
+
+									<p class="labels lp" *ngIf="maritalstatus=='Married'">
+										SPOUSE NAME
+									</p>
+									<input class="inputtext" type="text" *ngIf="maritalstatus=='Married'" [(ngModel)]="spousename" [ngModelOptions]="{standalone: true}" id="spousename" placeholder="">
+									<p class="labels lp" *ngIf="maritalstatus=='Married'">
+										WEDDING ANNIVERSARY
+									</p>
+									<button *ngIf="maritalstatus=='Married'" type="button" class="glyphicon glyphicon-calendar btn btn-sm btn-default btn-secondary datebutton" (click)="toggleStartDatePicker()"> {{(wedDay.length && wedMonth.length && wedYear.length)? (wedDay +'-'+ wedMonth +'-'+ wedYear):'Select Anniversary Date'}}</button>
+									<div *ngIf="showWedDatePicker && maritalstatus=='Married'" class= "datepicker">
+										<datepicker [(ngModel)]="dt" (ngModelChange)="onWeddingChange($event)" [ngModelOptions]="{standalone: true}" [minDate]="minDate" [showWeeks]="true"></datepicker>
+									</div>
+							</div>
+							<div class="col-lg-6 col-sm-6 col-md-6 col-xs-6 rightcol">
+								<p class="labels lp" [hidden]="role=='4'" >
+									CO-ORDINATOR EMAIL
+								</p>
+								<input class="inputtext" type="text" [hidden]="role=='4'" [(ngModel)]="comail" [ngModelOptions]="{standalone: true}" id="comail" placeholder=""><br>
+								<!-- <div class="error" *ngIf="addUserForm.controls.comail.touched && !addUserForm.controls.comail.valid">
+									 <p *ngIf="addUserForm.controls.comail.errors.required">
+											* Mail ID is required.
+									 </p>
+									 <p *ngIf="!addUserForm.controls.comail.isEmail">
+											* Mail ID entered is invalid.
+									 </p>
+								</div> -->
+								<p class="labels">
+									ADDRESS LINE
+								</p>
+								<input class="inputtext" type="text" [(ngModel)]="thoroughfare" [ngModelOptions]="{standalone: true}" id="thoroughfare" placeholder="Room / Apartment / Street">
+								<!-- <div class="error" *ngIf="addUserForm.controls.thoroughfare.touched && !addUserForm.controls.thoroughfare.valid">
+									 <p *ngIf="addUserForm.controls.thoroughfare.errors.required">
+											* Address Line is required.
+									 </p>
+								</div> -->
+								<p class="labels lp">
+									CITY
+								</p>
+								<ng-select #ci class="ng2select" [allowClear]="false"
+														[items]="cities"
+															(selected)="selected($event,'city')"
+															(removed)="removed($event,'city')"
+														[disabled]="disabled"
+														placeholder="No city selected">
+								</ng-select>
+								<!-- <div class="error" *ngIf="addCity==''">
+									 <p>
+											* City is required.
+									 </p>
+								</div> -->
+								<p class="labels lp">
+									STATE
+								</p>
+								<ng-select #st class="ng2select" [allowClear]="false"
+														[items]="states"
+														(selected)="selected($event,'state')"
+														(removed)="removed($event,'state')"
+														[disabled]="disabled"
+														placeholder="No state selected">
+								</ng-select>
+								<!-- <div class="error" *ngIf="addState==''">
+									 <p>
+											* State is required.
+									 </p>
+								</div> -->
+								<p class="labels lp">
+									Pin Code
+								</p>
+								<input class="inputtext" type="text" [(ngModel)]="postal_code" [ngModelOptions]="{standalone: true}" id="postal_code" placeholder="">
+								<!-- <div class="error" *ngIf="addUserForm.controls.postal_code.touched && !addUserForm.controls.postal_code.valid">
+									 <p *ngIf="addUserForm.controls.postal_code.errors.required">
+											* Postal Code is required.
+									 </p>
+								</div> -->
+								<p class="labels lp">
+									COUNTRY
+								</p>
+								<ng-select #co class="ng2select" [allowClear]="false"
+														[items]="country"
+														(selected)="selected($event,'country')"
+														(removed)="removed($event,'country')"
+														[disabled]="disabled"
+														placeholder="No state selected">
+								</ng-select>
+								<!-- <div class="error" *ngIf="addCountry==''">
+									 <p>
+											* Country is required.
+									 </p>
+								</div> -->
+							</div>
+						</div>
+
+						<button type="submit" class="submitButton">SEND</button>
+							</form>
+
+						</div>
+
+
+
+						</div>
+
+					</div>

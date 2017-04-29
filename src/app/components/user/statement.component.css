@@ -1,0 +1,119 @@
+* {
+    margin: 0;
+    padding: 0
+}
+html, body {
+    width: 100%;
+    height: 100%
+}
+.invoiceListOption {
+    position: absolute;
+    top: 6%;
+    width: 95%;
+    margin-left: 3%
+}
+.invoiceListOption .search {
+    display: inline
+}
+.invoiceListOption .search .searchbox {
+    border: 0;
+    border: 1px solid black;
+    border-radius: 5px;
+    line-height: 1.8;
+    width: 20%;
+    outline: none
+}
+.tab {
+    margin-top: 10%;
+    width: 96%;
+    margin-left: 2%
+}
+.tab .heading {
+    overflow: hidden
+}
+.tab .heading thead {
+    background-color: #333333;
+    color: white;
+    overflow: hidden
+}
+.tab .heading thead tr {
+    border: none
+}
+.tab .heading thead tr th {
+    word-break: break-all;
+    text-align: center;
+    border: none;
+    line-height: 2.7;
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+}
+.tab .usertable {
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 230px;
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid black;
+    border-top: 0
+}
+.tab .usertable .tablerow table {
+    width: 100%;
+    overflow: hidden
+}
+.tab .usertable .tablerow table tbody tr {
+    width: 100%;
+    position: relative
+}
+.tab .usertable .tablerow table tbody tr td {
+    word-break: break-all;
+    text-align: center;
+    border: none;
+    border-right: 1px solid #999999;
+    line-height: 2;
+    font-size: 14px;
+}
+.tab .usertable .tablerow table tbody tr td i {
+    font-size: 120%;
+    cursor: pointer
+}
+.tab .usertable .tablerow table tbody tr td .edit {
+    color: #006602
+}
+.tab .usertable .tablerow table tbody tr td .deleteicon {
+    color: #CC0000
+}
+.tab .usertable .tablerow table tbody tr:nth-child(even) {
+    background-color: #CCCCCC;
+    border: none
+}
+.totalcalculation {
+    margin-top: 5%
+}
+.totalcalculation .printbuttondiv {
+    margin-left: 2%
+}
+.totalcalculation .printbuttondiv .printButton {
+    width: 55%;
+    margin-top: 1%;
+    border: 0;
+    background-color: #FF6600;
+    color: white;
+    border-radius: 7px;
+    line-height: 2em;
+    float: left;
+    outline: none
+}
+.totalcalculation .key {
+    margin-left: 4.5%;
+    text-align: right
+}
+.totalcalculation .key .leftText {
+    line-height: 1.5
+}
+.totalcalculation .value {
+    text-align: right
+}
+.totalcalculation .value .rightText {
+    line-height: 1.5
+}

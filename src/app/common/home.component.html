@@ -1,0 +1,179 @@
+<div class="pageBody">
+    <div class="menu">
+        <div id="navline">
+
+        </div>
+        <nav id="navigation">
+            <div class="lidiv">
+                <a id="home" href="#homesection">HOME</a>
+                <a id="internationalTours" [routerLink]="['/international']" href="#contactsection">INTERNATIONAL TOURS</a>
+                <a id="contact" href="#contactsection">CONTACT US</a>
+                <a id="services" href="#servicessection">SERVICES</a>
+                <a id="domesticTours" [routerLink]="['/domestic']" href="#contactsection">DOMESTIC TOURS</a>
+                <a id="about" href="#aboutsection">ABOUT US</a>
+            </div>
+
+
+        </nav>
+        <button id="menuButton" (click)="menuClick()" type="button" name="button"></button>
+    </div>
+
+
+
+
+    <div id="homesection" class="container-fluid main">
+
+        <img class="logoImage" src="assets/img/logo.png" alt="" />
+        <!--  <img class="dubaiCircle " src="assets/circles/dubaicircle.png" alt="" />-->
+
+        <div class="myslides">
+            <swiper [config]="config">
+        <div class="swiper-wrapper">
+                <div class="swiper-slide" *ngFor="let s of allSlides" [ngStyle]="{'background-image': 'url('+s.image1_pc+')','background-size': 'cover'}">
+                    <img class="dubaiCircle animated pulse" id="yourElement" src="{{s.image2}}">
+                </div>
+                </div>
+            </swiper>
+        </div>
+
+    </div>
+
+
+    <div class="container-fluid rewardsPoint ">
+        <div class="education">
+            <img class="" src="assets/circles/edupng.png" alt="" />
+            <p>EDUCATIONAL TOUR</p>
+        </div>
+        <div (click)="goToLogin()" class="reward">
+            <img class="" src="assets/circles/reward.png" alt="" />
+            <p>REWARD POINTS</p>
+        </div>
+    </div>
+
+
+
+    <div id="servicessection" class="container-fluid services sect">
+        <img src="assets/circles/servicecircle.png" alt="" />
+        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 serviceBox">
+
+            <button class="odd" type="button" name="button" placement="top" triggers="focus" popover="International">
+				<div class="icon">
+					<div class="fontDiv">
+					<i class="fa fa-plane "aria-hidden="true"></i>
+					</div>
+				</div>
+				<div class="Terms">
+					<span class="text">International and Domestic Air Tickets</span>
+				</div>
+			</button>
+
+            <button type="button" name="button" placement="top" triggers="focus" popover="Worldwide!">
+				<div class="icon">
+					<div class="fontDiv">
+					<i class="fa fa-bed smallIcon" aria-hidden="true"></i>
+					</div>
+				</div>
+				<div class="Terms">
+					<span class="text">Worldwide Hotel Bookings</span>
+				</div>
+			</button>
+
+            <button class="odd" type="button" name="button" placement="top" triggers="focus" popover="Visas!">
+				<div class="icon">
+					<div class="fontDiv">
+					<i class="fa fa-plane"aria-hidden="true"></i>
+					</div>
+				</div>
+				<div class="Terms">
+					<span class="text">Visas</span>
+				</div>
+			</button>
+
+            <button type="button" name="button" placement="top" triggers="focus" popover="MICE!">
+				<div class="icon">
+					<div class="fontDiv">
+					<i class="fa fa-users smallIcon" aria-hidden="true"></i>
+					</div>
+				</div>
+				<div class="Terms">
+					<span class="text">MICE
+						<p>(Meetings, Insentives, Conferences & Exhibitions)</p>
+					</span>
+				</div>
+			</button>
+
+
+            <button class="odd" type="button" name="button" placement="top" triggers="focus" popover="Domestic!">
+				<div class="icon">
+					<div class="fontDiv">
+					<i class="fa fa-plane"aria-hidden="true"></i>
+					</div>
+				</div>
+				<div class="Terms">
+					<span class="text">International and Domestic Holiday Packages</span>
+				</div>
+			</button>
+
+            <button type="button" name="button" placement="top" triggers="focus" popover="Student!">
+				<div class="icon">
+					<div class="fontDiv">
+					<i class="fa fa-book smallIcon" aria-hidden="true"></i>
+					</div>
+				</div>
+				<div class="Terms">
+					<span class="text">Student's Group Tours</span>
+				</div>
+			</button>
+
+        </div>
+    </div>
+
+    <div id="aboutsection" class="container-fluid aboutUs sect">
+        <img src="assets/circles/aboutuscircle.png" alt="" />
+        <div class="aboutUsContent">
+            <p>
+                Panorama Travel stands in a class of its own offering exceptionally run, comfortable, uniquely designed sojourns tailored
+                perfectly to your tastes. Ours is a professionally managed tour & travel company established to cater each
+                and every requirement of tourists travelling to different parts of the world. Our Concept and philosophy
+                focuses purely on you to enjoy every tour booked with us and to make trip a memorable and unforgettable experience.
+                We believe that travelling should be fun and provide the travelers with wide range of options. Select your
+                destination, choose the hotels/ resorts of your preference, decide the number of days you want to spend on
+                tour and we will tailor-make the package, exclusively designed for you. It would be the combination of your
+                preferences and our expertise. So, enjoy the freedom to make your dream come true by experiencing our world
+                class services.
+            </p>
+        </div>
+    </div>
+
+
+    <div id="contactsection" class="container-fluid ContactUs sect">
+        <img src="assets/circles/contactuscircle.png" alt="" />
+        <div class="MapDiv">
+            <div id="googleMap" class="google">
+            </div>
+        </div>
+
+        <div class="contactUsContent">
+            <ul class="contactList">
+                <li>
+                    <i class="fa fa-phone" aria-hidden="true"></i>
+                    <p>+91 22 27888618 / 27888619</p>
+                </li>
+                <li>
+                    <i class="fa fa-google" aria-hidden="true"></i>
+                    <p>panaromatravelsolutions@gmail.com</p>
+                </li>
+                <li>
+                    <i class="fa fa-map-marker" aria-hidden="true"></i>
+                    <p>A-248, 1st Floor, Vashi Plaza, Vashi Flyover, Sector 17, Vashi, Navi Mumbai, Maharashtra 400703</p>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+<!--<ks-swiper-container [options]="example1SwipeOptions">
+                <ks-swiper-slide *ngFor="let s of allSlides" [ngStyle]="{'background-image': 'url('+s.image1_pc+')','background-size': 'cover'}">
+                    <img class="dubaiCircle animated pulse" id="yourElement" src="{{s.image2}}">
+                </ks-swiper-slide> 
+            </ks-swiper-container>-->

@@ -1,0 +1,35 @@
+<div class="row showmilage">
+			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 leftDiv">
+				<p class="withdrawpoints">WITHDRAW POINTS</p>
+				<p class="availabePoints">Available Points : {{userDetails.balance || 0}}</p>
+				<p class="PointToBeClaimed">Points to be claimed for next invoice</p>
+				<p class="pointsInDigits">{{userDetails.float || 0}}</p>
+				<input [(ngModel)]="withDrawIn" class="enterPoints" type="number" name="name" value=""><br>
+				<button class="withdrawButton" (click)="submitRedeem('withdraw',withDrawIn)" type="button" name="button">WITHDRAW</button>
+			</div>
+			<div class="col-lg-6 col-md-6 col-sm-6 col-xl-6 rightDiv">
+				<p class="withdrawpoints">CANCEL CLAIMED POINTS</p>
+				<p class="availabePoints">Available Points : {{userDetails.balance || 0}}</p>
+				<p class="PointToBeClaimed">Points to be claimed for next invoice</p>
+				<p class="pointsInDigits">{{userDetails.float || 0}}</p>
+				<input [(ngModel)]="cancelIn" class="enterPoints" type="number" name="name" value=""><br>
+				<button class="cancelButton" (click)="submitRedeem('cancel',cancelIn)" type="button" name="button">CANCEL</button>
+			</div>
+
+		</div>
+
+
+		<div class="row totalcalculation">
+					<div class="col-lg-9 col-md-9 col-sm-9 col-xs-9 key">
+						<span class="leftText">BALANCE:</span><br>
+						<span class="leftText">CLAIMED:</span><br>
+						<span class="leftText">REDEEMED:</span><br>
+					</div>
+					<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 value">
+						<span class="rightText">{{userDetails.balance || 0}}</span><br>
+						<span class="rightText">{{userDetails.float || 0}}</span><br>
+						<span class="rightText">{{userDetails.redeemed || 0}}</span><br>
+					</div>
+
+		</div>
+<ng2-toasty></ng2-toasty>
