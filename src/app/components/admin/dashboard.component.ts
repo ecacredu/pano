@@ -26,12 +26,17 @@ export class AdminDashboardComponent{
 
     constructor(public element: ElementRef,private adService:AdminService,private toastyService:ToastyService) {
 
-      this.adService.getOfferMilage().subscribe((res)=>{});
-
     }
 
-    ngDoCheck() {
-      this.milage=this.adService.retrieveOfferMilage();
+    ngOnInit() {
+      // this.milage=this.adService.retrieveOfferMilage();
+      this.adService.getOfferMilage().subscribe((res)=>{
+          let offers = this.adService.retrieveOfferMilage();
+          console.log("PERCENTS: "+JSON.stringify(offers))
+          this.newmilage = offers.percent;
+          this.newPackagemilage = offers.percent_package;
+          this.newHotelmilage = offers.percent_hotel;
+      });
       this.invoiceInfo=this.adService.refreshInvoiceDetails();
       this.userInfo=this.adService.refreshUserDetails();
     }
@@ -44,7 +49,10 @@ export class AdminDashboardComponent{
           this.toastyService.clear(this.waitToastID);
           this.addToast('success','Success !','Milage changed successfully.', 5000);
           this.adService.getOfferMilage().subscribe((res)=>{
-            this.milage=this.adService.retrieveOfferMilage();
+              let offers = this.adService.retrieveOfferMilage();
+              this.newmilage = offers.percent;
+              this.newPackagemilage = offers.percent_package;
+              this.newHotelmilage = offers.percent_hotel;
           });
         }
       });

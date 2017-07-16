@@ -104,6 +104,8 @@ export class AdminInvoiceComponent {
   public initialStatus = '';
   public newStatus = '';
 
+  public submitting:boolean = false;
+
   constructor(public swalService: SweetAlertService, public element: ElementRef, private toastyService: ToastyService, private adService: AdminService, public us: UserService) {
     self = this;
     this.selectedStatus = this.status[0];
@@ -124,8 +126,10 @@ export class AdminInvoiceComponent {
   ngOnInit() {
     jQuery(".invoicetable").niceScroll({ cursorwidth: "6px", cursorborder: "1px solid #ccc", cursorcolor: "#ccc", autohidemode: "cursor" });
     this.createForm();
+  }
 
-
+  onModalHide(ev: any){
+    this.submitting = false;
   }
 
   ngDoCheck() {
@@ -135,11 +139,12 @@ export class AdminInvoiceComponent {
   }
 
   createForm() {
+    // this.submitting = false;
     this.addInvoiceForm = new FormGroup({});
   }
 
   createAutoForm(invoice: any) {
-
+    // this.submitting = false;
     let htmldate: any = invoice.journey_date;
 
     this.invoiceToUpdate = invoice;
@@ -232,6 +237,7 @@ export class AdminInvoiceComponent {
   }
 
   onAddInvoiceSubmit(ev: any) {
+    this.submitting = true;
     ev.preventDefault();
     if (this.errorToastID) {
       this.toastyService.clear(this.errorToastID);
@@ -245,27 +251,35 @@ export class AdminInvoiceComponent {
     // console.log(JSON.stringify(this.finalFileObject));
     if (this.invoiceid == '') {
       this.addToast('error', 'Error !', 'Invoice id required.', 10000);
+      this.submitting = false;
     }
     else if (this.description == '') {
       this.addToast('error', 'Error !', 'Description required.', 10000);
+      this.submitting = false;
     }
     else if (this.to == '') {
       this.addToast('error', 'Error !', 'To field required.', 10000);
+      this.submitting = false;
     }
     else if (this.seats == null) {
       this.addToast('error', 'Error !', 'Seats required.', 10000);
+      this.submitting = false;
     }
     else if (this.addInvoiceSelectedUser == undefined || this.addInvoiceSelectedCord == undefined) {
       this.addToast('error', 'Error !', 'User / co-ordinator not selected.', 10000);
+      this.submitting = false;
     }
     else if (this.onDateDay == '' && this.onDateMonth == '' && this.onDateYear == '') {
       this.addToast('error', 'Error !', 'Journey date not selected.', 10000);
+      this.submitting = false;
     }
     else if (this.selectedBookingfor == undefined) {
       this.addToast('error', 'Error !', 'Transport mode not selected.', 10000);
+      this.submitting = false;
     }
     else if (this.invoicecost == undefined) {
       this.addToast('error', 'Error !', 'Invoice cost is missing.', 10000);
+      this.submitting = false;
     }
     else {
 
@@ -329,6 +343,8 @@ export class AdminInvoiceComponent {
               }
               this.addToast('success', 'Success !', 'Invoice updated successfully.', 5000);
 
+              this.lgModal.hide();
+
               //Edit
               if (this.newStatus != this.initialStatus) {
 
@@ -354,61 +370,6 @@ export class AdminInvoiceComponent {
                 }
 
               }
-              // this.adService.getAllInvoices().subscribe((res) => {
-              //   this.AllInvoices = this.adService.retrieveInvoices();
-              // });
-              // this.adService.getOfferMilage().subscribe((res) => { });
-              // if (this.selectedStatus.text == 'Cancelled' || this.selectedStatus.text=='Departed') {
-              //   let percentoffer: any = this.adService.retrieveOfferMilage();
-
-              //   let finalmilagetoadd: any = (this.netinvoicecost * parseFloat(percentoffer.percent)) / 100;
-
-              //   let floatToUpdate = parseFloat(this.adService.userDetails.float)-this.floattoredeem;
-
-              //   if(this.selectedStatus.text=='Departed'){
-              //     let updtuserform = {
-              //         field_balance: { und: [{ value: Math.round(this.updateredeemed) }] }
-              //         // field_redeemed : { und: [{ value: this.floattoredeem+"" }] },
-              //         // field_float : { und: [{ value: floatToUpdate+"" }] }
-              //       };
-
-              //       this.adService.updateUserPoints(this.addInvoiceSelectedUser.id, updtuserform).subscribe((res) => {
-              //         if (res.status == 200) {
-              //           this.addToast('success', 'Successfull !', 'Points updated !', 4000);
-              //         }
-              //       });
-              //   }
-
-              //   stateForm = {
-              //     title: 'Loyalty Points',
-              //     type: 'loyalty_milage',
-              //     name: this.addInvoiceSelectedUser.name,
-              //     field_description: { und: [{ value: 'Against Invoice Cancellation ' + this.invoiceid }] },
-              //     field_transaction_type: { und: ['Milage Deposit'] },
-              //     field_milage: { und: [{ value: Math.round(this.updateredeemed) }] },
-              //     field_against_invoice: { und: '[nid (' + this.invoicetoupdateid + ')]' },
-              //   };
-
-              //   this.adService.createStatement(stateForm).subscribe((sres) => {
-
-              //     if (sres.status == 200) {
-              //       if (this.waitToastID) {
-              //         this.toastyService.clear(this.waitToastID);
-              //       }
-              //       this.addToast('success', 'Success !', 'Statement generated successfully.', 5000);
-              //       this.openForm();
-              //     } else {
-              //       if (this.waitToastID) {
-              //         this.toastyService.clear(this.waitToastID);
-              //       }
-              //       // console.log(JSON.stringify(sres.data));
-              //       this.addToast('error', 'Error !', JSON.stringify(sres.data), 10000);
-              //     }
-
-              //   });
-              // } else {
-              //   this.openForm();
-              // }
 
             } else {
               if (this.waitToastID) {
@@ -497,6 +458,8 @@ export class AdminInvoiceComponent {
                   }
                   this.addToast('success', 'Success !', 'Invoice saved successfully.', 5000);
 
+                  this.lgModal.hide();
+
                   //Edit
                   if (this.newStatus != this.initialStatus) {
 
@@ -522,63 +485,7 @@ export class AdminInvoiceComponent {
                     }
 
                   }
-                  // this.addToast('wait', 'Saving !', 'Generating statement', 50000);
-                  // this.adService.getAllInvoices().subscribe((res) => {
-                  //   this.AllInvoices = this.adService.retrieveInvoices();
-                  // });
-                  // this.adService.getOfferMilage().subscribe((res) => { });
-                  // if (this.selectedStatus.text == 'Cancelled' || this.selectedStatus.text=='Departed') {
-                  //   let percentoffer: any = this.adService.retrieveOfferMilage();
-
-                  //   let finalmilagetoadd: any = (this.netinvoicecost * parseFloat(percentoffer.percent)) / 100;
-
-                  //   let floatToUpdate = parseFloat(this.adService.userDetails.float)-this.floattoredeem;
-
-                  //   if(this.selectedStatus.text=='Departed'){
-                  //       let updtuserform = {
-                  //         field_balance: { und: [{ value: Math.round(this.updateredeemed) }] }
-                  //         // field_redeemed : { und: [{ value: this.floattoredeem+"" }] },
-                  //         // field_float : { und: [{ value: floatToUpdate+"" }] }
-                  //       };
-
-                  //       this.adService.updateUserPoints(this.addInvoiceSelectedUser.id, updtuserform).subscribe((res) => {
-                  //         if (res.status == 200) {
-                  //           this.addToast('success', 'Successfull !', 'Points updated !', 4000);
-                  //         }
-                  //       });
-                  //     }
-
-
-
-                  //   stateForm = {
-                  //     title: 'Loyalty Points',
-                  //     type: 'loyalty_milage',
-                  //     name: this.addInvoiceSelectedUser.name,
-                  //     field_description: { und: [{ value: this.description }] },
-                  //     field_transaction_type: { und: ['Milage Deposit'] },
-                  //     field_milage: { und: [{ value: Math.round(this.updateredeemed) }] },
-                  //     field_against_invoice: { und: '[nid (' + this.invoicetoupdateid + ')]' },
-                  //   };
-
-                  //   this.adService.createStatement(stateForm).subscribe((sres) => {
-
-                  //     if (sres.status == 200) {
-                  //           if (this.waitToastID) {
-                  //             this.toastyService.clear(this.waitToastID);
-                  //           }
-                  //           this.addToast('success', 'Success !', 'Statement generated successfully.', 5000);
-                  //           this.openForm();
-                  //     } else {
-                  //       this.toastyService.clear(this.waitToastID);
-                  //       // console.log(JSON.stringify(sres.data));
-                  //       this.addToast('error', 'Error !', JSON.stringify(sres.data), 10000);
-                  //     }
-
-                  //   });
-
-                  // } else {
-                  //   this.openForm();
-                  // }
+               
                 } else {
                   if (this.waitToastID) {
                     this.toastyService.clear(this.waitToastID);
@@ -680,7 +587,7 @@ export class AdminInvoiceComponent {
 
 
                   this.addToast('success', 'Success !', 'Invoice saved successfully.', 5000);
-
+                  this.lgModal.hide();
                   if (this.selectedStatus.text == "Pending" || this.selectedStatus.text == "Completed") {
                     // yaha user update karega waha relect hoga okToh rukh lemme think
                     // chai pike aya ok ok?
@@ -811,6 +718,8 @@ export class AdminInvoiceComponent {
 
 
                   this.addToast('success', 'Success !', 'Invoice saved successfully.', 5000);
+
+                  this.lgModal.hide();
 
                   if (this.selectedStatus.text == "Pending" || this.selectedStatus.text == "Completed") {
                     // yaha user update karega waha relect hoga okToh rukh lemme think
@@ -1002,16 +911,42 @@ export class AdminInvoiceComponent {
     }
   }
 
+  onFromToChange(type:any, value: any){
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1;
+    var yy = today.getFullYear();
+    this.description = this.selectedBookingfor? this.selectedBookingfor.text : '';
+    if(type == 'from'){
+      this.from = value;
+      this.description +=`\n `+this.from+` - `+this.to+'\n';
+      this.description += dd+'/'+mm+'/'+yy;
+    }else{
+      this.to = value;
+      this.description +=`\n `+this.from+` - `+this.to+'\n';
+      this.description += dd+'/'+mm+'/'+yy;
+    }
+  }
+
   selected(value: any, type: string): void {
     if (type == 'status') {
       this.selectedStatus = value;
       this.newStatus = value.text;
     } else if (type == 'bookingfor') {
-
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth()+1;
+        var yy = today.getFullYear();
       if (value.text == 'Car' || value.text == 'Bus' || value.text == 'Train' || value.text == 'Flight') {
-        this.fromTrue = true;
+        this.fromTrue = true;      
+        this.description = value.text;
+        this.description +=`\n `+this.from+` - `+this.to+'\n';
+        this.description += dd+'/'+mm+'/'+yy;
       } else {
         this.fromTrue = false;
+        this.description = value.text;
+        this.description +=`\n `+this.from+'\n';
+        this.description += dd+'/'+mm+'/'+yy;
       }
       this.selectedBookingfor = value;
     } else if (type == 'allcoords') {
@@ -1036,10 +971,20 @@ export class AdminInvoiceComponent {
       this.selectedStatus = value;
       this.newStatus = value.text;
     } else if (type == 'bookingfor') {
+      var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth()+1;
+        var yy = today.getFullYear();
       if (value.text == 'Car' || value.text == 'Bus' || value.text == 'Train' || value.text == 'Flight') {
-        this.fromTrue = true;
+        this.fromTrue = true;      
+        this.description = value.text;
+        this.description +=`\n `+this.from+` - `+this.to+'\n';
+        this.description += dd+'/'+mm+'/'+yy;
       } else {
         this.fromTrue = false;
+        this.description = value.text;
+        this.description +=`\n `+this.from+'\n';
+        this.description += dd+'/'+mm+'/'+yy;
       }
       this.selectedBookingfor = value;
     } else if (type == 'allcoords') {

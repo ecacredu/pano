@@ -67,7 +67,7 @@
 			</div>
 			<ng2-toasty></ng2-toasty>
 			<!-- Modal -->
-				  <div  bsModal #lgModal="bs-modal" class="modal fade mpdalDiv" id="myModal"tabindex="-1" role="dialog" aria-hidden="true" >
+				  <div  bsModal #lgModal="bs-modal" (onHide)="onModalHide($event)" class="modal fade mpdalDiv" id="myModal"tabindex="-1" role="dialog" aria-hidden="true" >
 				    <!-- <div class="modal-dialog actualDiv"> -->
 
 				      <!-- Modal content-->
@@ -103,7 +103,7 @@
 											<p class="labels lp">
 												DESCRIPTION
 											</p>
-											<textarea [(ngModel)]="description" [ngModelOptions]="{standalone: true}"  ></textarea>
+											<textarea style="line-height:1.5;" [(ngModel)]="description" [ngModelOptions]="{standalone: true}"  ></textarea>
 											<!-- <p class="error" *ngIf="addInvoiceForm.controls.description.touched && !addInvoiceForm.controls.description.valid">
 									      * Description id is required
 									    </p> -->
@@ -126,14 +126,14 @@
 											<p  *ngIf="fromTrue" class="labels">
 												FROM
 											</p>
-											<input *ngIf="fromTrue"  class="inputtext" [(ngModel)]="from" [ngModelOptions]="{standalone: true}" type="text" value="">
+											<input *ngIf="fromTrue" (ngModelChange)="onFromToChange('from',$event)" [ngModel]="from" class="inputtext" [ngModelOptions]="{standalone: true}" type="text" value="">
 											<!-- <p class="error" *ngIf="addInvoiceForm.controls.from.touched && !addInvoiceForm.controls.from.valid">
 									      * Field required
 									    </p> -->
 											<p  class="labels lp">
 												{{ fromTrue? 'TO':'DESTINATION' }}
 											</p>
-											<input class="inputtext" [(ngModel)]="to" [ngModelOptions]="{standalone: true}" type="text" value="">
+											<input class="inputtext" (ngModelChange)="onFromToChange('to',$event)" [ngModel]="to" [ngModelOptions]="{standalone: true}" type="text" value="">
 											<!-- <p class="error" *ngIf="addInvoiceForm.controls.to.touched && !addInvoiceForm.controls.to.valid">
 									      * Field required
 									    </p> -->
@@ -211,7 +211,7 @@
 									</div>
 								</div>
 
-								<button type="submit" class="submitButton">Save</button>
+								<button type="submit" [disabled]="submitting" class="submitButton">Save</button>
 
 									</form>
 

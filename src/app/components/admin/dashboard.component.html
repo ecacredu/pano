@@ -33,13 +33,11 @@
 				<span class="leftText">TOTAL INVOICES:</span><br>
 				<span class="leftText">TOTAL INVOICE COST:</span><br>
 				<span class="leftText">TOTAL REDEEMED:</span><br>
-				<!--<span class="leftText">TOTAL CANCELLED:</span><br>-->
 			</div>
 			<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 value">
 				<span class="rightText">{{invoiceInfo.total || 0}}</span><br>
 				<span class="rightText">{{invoiceInfo.cost || 0}}</span><br>
 				<span class="rightText">{{invoiceInfo.redeemed || 0}}</span><br>
-				<!--<span class="rightText">{{invoiceInfo.cancelled || 0}}</span><br>-->
 			</div>
 		</div>
 		<div class="row endingline">
@@ -74,7 +72,7 @@
 			<p class="thirdline">
 			</p>
 			<p class="currentMilage">Current Milage</p>
-			 <p class="pointspercent">{{milage.percent}}%</p>
+			 <p class="pointspercent">{{newmilage}}%</p>
 		</div>
 
 

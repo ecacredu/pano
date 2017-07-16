@@ -116,7 +116,7 @@ export class AdminService {
     }
 
     retrieveOfferMilage() {
-        return this.offermilage.percent;
+        return this.offermilage;
     }
 
     retrieveOfferMilageAccordingToType(type: any) {
