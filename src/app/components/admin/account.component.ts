@@ -30,10 +30,10 @@ export class AdminAccountComponent {
 
   maskUserFunc(id: any) {
     this.addToast('wait', 'Logging User', 'Logging into users account...', 30000);
-    this.userService.getUser(id, true).subscribe((res) => {
+    this.userService.getUser(id.replace(/^0+/, ''), true).subscribe((res) => {
       if (res.status == 200) {
         this.toastyService.clear(this.waitToastID);
-        this.addToast('success', 'Success', 'Logging...', 8000);
+        this.addToast('success', 'Success', 'Logging...', 3000);
         this.userService.maskUser = res.data;
         this.router.navigate(['/admin/account/user/dashboard']);
       }

@@ -188,6 +188,16 @@ export class AdminUsersComponent {
     this.addState = ''; this.addCity = ''; this.addCountry = '';
   }
 
+  getPaddedUnique(a){
+    var pad = "0000"
+    var ans = pad.substring(0, pad.length - a.length) + a
+    return "PCH"+ans;
+  }
+
+  getTotalPnts(a,b){
+    return parseInt(a)+parseInt(b);
+  }
+
   openAutoForm(user: any) {
     this.updateIn = true;
     this.createAutoForm(user);
@@ -302,8 +312,8 @@ export class AdminUsersComponent {
   }
 
   isPassSame(control: any, pass: string): { [s: string]: boolean } {
-    console.log(control.value);
-    console.log(control.value);
+    // console.log(control.value);
+    // console.log(control.value);
     return { isPassSame: true };
   }
 
@@ -429,7 +439,7 @@ export class AdminUsersComponent {
           field_role: { und: [(this.role == '4' ? 'Individual' : 'Company')] }
         };
 
-        console.log(JSON.stringify(this.newUserForm));
+        // console.log(JSON.stringify(this.newUserForm));
 
         this.addToast('wait', 'Adding User', 'Creating user account.', 40000);
 
@@ -506,7 +516,7 @@ export class AdminUsersComponent {
               }
             };
 
-            console.log(JSON.stringify(this.newCoordinatorForm));
+            // console.log(JSON.stringify(this.newCoordinatorForm));
 
             this.addToast('wait', 'Adding User', 'Creating Co-Ordinator account.', 40000);
 
@@ -565,7 +575,7 @@ export class AdminUsersComponent {
   }
 
   public selected(value: any, type: string): void {
-    console.log('Selected value is: ', value);
+    // console.log('Selected value is: ', value);
     if (type == 'state') {
       this.addState = value.text;
     } else if (type == 'city') {
@@ -576,7 +586,7 @@ export class AdminUsersComponent {
   }
 
   public removed(value: any, type: string): void {
-    console.log('Removed value is: ', value);
+    // console.log('Removed value is: ', value);
     if (type == 'state') {
       this.addState = '';
     } else if (type == 'city') {
@@ -624,7 +634,7 @@ export class AdminUsersComponent {
         confirmButtonText: 'Yes, delete user!',
         cancelButtonText: 'No, keep it',
       }).then((button) => {
-        console.log(button);
+        // console.log(button);
         if (button) {
           this.addToast('wait', 'Deleting User', 'Thrashing User Data', 30000);
           this.adService.deleteUser(uid).subscribe((res) => {
@@ -635,7 +645,7 @@ export class AdminUsersComponent {
         }
 
       }, (dismiss) => {
-        console.log(dismiss);
+        // console.log(dismiss);
       });
     }
 
@@ -654,7 +664,7 @@ export class AdminUsersComponent {
       theme: 'default',
       timeout: timeout,
       onAdd: (toast: ToastData) => {
-        console.log('Toast ' + toast.id + ' has been added!');
+        // console.log('Toast ' + toast.id + ' has been added!');
         if (type == 'wait') {
           this.waitToastID = toast.id;
         } else if (type == 'success') {
@@ -667,7 +677,7 @@ export class AdminUsersComponent {
 
       },
       onRemove: function (toast: ToastData) {
-        console.log('Toast ' + toast.id + ' has been removed!');
+        // console.log('Toast ' + toast.id + ' has been removed!');
         if (type == 'wait') {
           this.waitToastID = null;
         } else if (type == 'success') {

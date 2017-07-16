@@ -33,13 +33,13 @@
 				<span class="leftText">TOTAL INVOICES:</span><br>
 				<span class="leftText">TOTAL INVOICE COST:</span><br>
 				<span class="leftText">TOTAL REDEEMED:</span><br>
-				<span class="leftText">TOTAL CANCELLED:</span><br>
+				<!--<span class="leftText">TOTAL CANCELLED:</span><br>-->
 			</div>
 			<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 value">
 				<span class="rightText">{{invoiceInfo.total || 0}}</span><br>
 				<span class="rightText">{{invoiceInfo.cost || 0}}</span><br>
 				<span class="rightText">{{invoiceInfo.redeemed || 0}}</span><br>
-				<span class="rightText">{{invoiceInfo.cancelled || 0}}</span><br>
+				<!--<span class="rightText">{{invoiceInfo.cancelled || 0}}</span><br>-->
 			</div>
 		</div>
 		<div class="row endingline">
@@ -57,8 +57,18 @@
 			<p class="milagepercent">Milage Percent</p>
 
 			<div class="milageForm">
-				<input class="points" [(ngModel)]="newmilage" type="text" name="name" value=""><br>
-				<button class="pointstobesubmit" type="button" (click)="updateMil(newmilage)" name="button">CHANGE</button>
+				<input placeholder="Normal" class="points" [(ngModel)]="newmilage" type="text" name="name" value=""><br>
+				<button class="pointstobesubmit" type="button" (click)="updateMil(newmilage,'Normal')" name="button">CHANGE</button>
+			</div>
+
+			<div  class="milageForm">
+				<input placeholder="Hotel" class="points" [(ngModel)]="newHotelmilage" type="text" name="name" value=""><br>
+				<button class="pointstobesubmit" type="button" (click)="updateMil(newHotelmilage,'Hotel')" name="button">CHANGE</button>
+			</div>
+
+			<div  class="milageForm">
+				<input placeholder="Package" class="points" [(ngModel)]="newPackagemilage" type="text" name="name" value=""><br>
+				<button class="pointstobesubmit" type="button" (click)="updateMil(newPackagemilage,'Package')" name="button">CHANGE</button>
 			</div>
 
 			<p class="thirdline">

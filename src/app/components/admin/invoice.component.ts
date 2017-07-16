@@ -7,6 +7,7 @@ import { ToastyService, ToastyConfig, ToastyComponent, ToastOptions, ToastData }
 import { SweetAlertService } from 'ng2-sweetalert2';
 import { AdminService } from '../../providers/adminrights';
 import { ModalDirective } from 'ngx-bootstrap/modal';
+import { UserService } from '../../providers/userservice';
 declare var jQuery: any;
 declare var self: any;
 @Component({
@@ -25,13 +26,16 @@ export class AdminInvoiceComponent {
   @ViewChild('forselect')
   private foselect: SelectComponent;
 
+  @ViewChild('statusselect')
+  private statusselect: SelectComponent;
+
   addInvoiceForm: FormGroup;
 
   public invoiceid: string = '';
   public description: string = '';
   public from: string = '';
   public to: string = '';
-  public seats: number = null;
+  public seats: any = null;
 
   public file: File;
   public reader: FileReader;
@@ -52,8 +56,8 @@ export class AdminInvoiceComponent {
   public updateIn: boolean = false;
 
   public status: any = [
-    { id: '0', text: 'On-Going' },
-    { id: '1', text: 'Departed' },
+    { id: '0', text: 'Pending' },
+    { id: '1', text: 'Completed' },
     { id: '2', text: 'Cancelled' }
   ];
 
@@ -61,11 +65,16 @@ export class AdminInvoiceComponent {
     { id: '0', text: 'Bus' },
     { id: '1', text: 'Train' },
     { id: '2', text: 'Flight' },
-    { id: '3', text: 'Hotel' }
+    { id: '3', text: 'Hotel' },
+    { id: '4', text: 'Visa' },
+    { id: '5', text: 'Package' },
+    { id: '6', text: 'Car' }
   ];
 
   public allusers: any = [];
   public allcoords: any = [];
+
+  public invoiceToUpdate: any;
 
   public disabled: boolean = true;
 
@@ -76,7 +85,7 @@ export class AdminInvoiceComponent {
 
   public selectedCord: any;
 
-  private showOnDatePicker: boolean = false;
+  public showOnDatePicker: boolean = false;
   public onDate: Date = new Date();
   public onDateDay: string = ''; public onDateMonth: string = ''; public onDateYear: string = '';
 
@@ -90,15 +99,19 @@ export class AdminInvoiceComponent {
   public updateredeemed: any;
 
   public invoicetoupdateid: any;
+  public fromTrue = false;
 
-  constructor(public swalService: SweetAlertService, public element: ElementRef, private toastyService: ToastyService, private adService: AdminService) {
+  public initialStatus = '';
+  public newStatus = '';
+
+  constructor(public swalService: SweetAlertService, public element: ElementRef, private toastyService: ToastyService, private adService: AdminService, public us: UserService) {
     self = this;
     this.selectedStatus = this.status[0];
     this.adService.getAllCords().subscribe((res) => { });
 
   }
 
-  private toggleOnDatePicker(): void {
+  public toggleOnDatePicker(): void {
     this.showOnDatePicker = !this.showOnDatePicker;
   }
 
@@ -129,6 +142,8 @@ export class AdminInvoiceComponent {
 
     let htmldate: any = invoice.journey_date;
 
+    this.invoiceToUpdate = invoice;
+
     var div = document.createElement('div');
     div.innerHTML = htmldate;
     var text = div.textContent || div.innerText || '';
@@ -138,12 +153,12 @@ export class AdminInvoiceComponent {
     this.onDateDay = this.onDate.getDate().toString();
     this.onDateMonth = (this.onDate.getMonth() + 1).toString();
     this.onDateYear = this.onDate.getFullYear().toString();
-    console.log(this.onDate);
-    console.log(this.onDateDay + ' -- ' + this.onDateMonth + ' -- ' + this.onDateYear);
+    // console.log(this.onDate);
+    // console.log(this.onDateDay + ' -- ' + this.onDateMonth + ' -- ' + this.onDateYear);
 
     this.invoicetoupdateid = invoice.nid;
 
-    console.log(invoice.booking_for);
+    // console.log(invoice.booking_for);
 
     this.invoiceid = invoice.title;
     this.description = invoice.description;
@@ -152,6 +167,10 @@ export class AdminInvoiceComponent {
     this.seats = invoice.seats;
     this.foselect.active = [{ text: invoice.booking_for }];
     this.selectedBookingfor = { text: invoice.booking_for };
+
+    this.statusselect.active = [{ text: invoice.status }];
+    this.selectedStatus = { text: invoice.status };
+    this.initialStatus = invoice.status;
 
     this.updateredeemed = invoice.milage_redeemed;
     this.invoicecost = invoice.invoice_cost;
@@ -221,17 +240,14 @@ export class AdminInvoiceComponent {
     let tempext: any;
     let invoiceform: any;
     let stateForm: any;
-    console.log(JSON.stringify(this.addInvoiceSelectedUser));
-    console.log(JSON.stringify(this.addInvoiceSelectedCord));
-    console.log(JSON.stringify(this.finalFileObject));
+    // console.log(JSON.stringify(this.addInvoiceSelectedUser));
+    // console.log(JSON.stringify(this.addInvoiceSelectedCord));
+    // console.log(JSON.stringify(this.finalFileObject));
     if (this.invoiceid == '') {
       this.addToast('error', 'Error !', 'Invoice id required.', 10000);
     }
     else if (this.description == '') {
       this.addToast('error', 'Error !', 'Description required.', 10000);
-    }
-    else if (this.from == '') {
-      this.addToast('error', 'Error !', 'From field required.', 10000);
     }
     else if (this.to == '') {
       this.addToast('error', 'Error !', 'To field required.', 10000);
@@ -264,7 +280,7 @@ export class AdminInvoiceComponent {
           invoiceform = {
             title: this.invoiceid,
             type: 'invoice',
-            name: this.addInvoiceSelectedUser.name,
+            // name: this.addInvoiceSelectedUser.name,
             field_booked_by: { und: '[uid (' + this.addInvoiceSelectedUser.id + ')]' },
             field_co_ordinator: { und: '[nid (' + this.addInvoiceSelectedCord.id + ')]' },
             field_booking_for: { und: [this.selectedBookingfor.text] },
@@ -279,7 +295,32 @@ export class AdminInvoiceComponent {
             }
           };
 
-          console.log(JSON.stringify(invoiceform));
+          let currentUserClaims = this.getUserClaimedMilage(this.invoiceToUpdate.user);
+
+          if (this.initialStatus != this.newStatus) {
+
+
+            if (this.initialStatus == "Cancelled") {
+              invoiceform.field_points_redeemed = { und: [{ value: currentUserClaims }] };
+            }
+
+
+
+            if (this.selectedStatus.text == "Pending") {
+              invoiceform.field_milage_recieved = { und: [{ value: "0" }] };
+            }
+
+            if (this.selectedStatus.text == "Completed") {
+              invoiceform.field_milage_recieved = { und: [{ value: parseInt(((parseFloat(this.netinvoicecost) * parseFloat(this.invoiceToUpdate.milage_percent)) / 100) + '') + '' }] };
+            }
+
+            if (this.selectedStatus.text == "Cancelled") {
+              invoiceform.field_milage_recieved = { und: [{ value: "0" }] };
+              invoiceform.field_points_redeemed = { und: [{ value: "0" }] };
+            }
+          }
+
+          // console.log(JSON.stringify(invoiceform));
 
           this.adService.updateInvoice(invoiceform, this.invoicetoupdateid).subscribe((inres) => {
             if (inres.status == 200) {
@@ -287,61 +328,93 @@ export class AdminInvoiceComponent {
                 this.toastyService.clear(this.waitToastID);
               }
               this.addToast('success', 'Success !', 'Invoice updated successfully.', 5000);
-              this.adService.getAllInvoices().subscribe((res) => {
-                this.AllInvoices = this.adService.retrieveInvoices();
-              });
-              this.adService.getOfferMilage().subscribe((res) => { });
-              if (this.selectedStatus.text == 'Cancelled') {
-                let percentoffer: any = this.adService.retrieveOfferMilage();
 
-                let finalmilagetoadd: number = (this.netinvoicecost * Number(percentoffer.percent)) / 100;
+              //Edit
+              if (this.newStatus != this.initialStatus) {
 
-                let updtuserform = {
-                  field_balance: { und: [{ value: Math.round(this.updateredeemed) }] }
-                };
+                if (this.initialStatus == "Cancelled") {
+                  let temp = {
+                    field_claimed_milage: { und: [{ value: "0" }] }
+                  };
+                  this.us.updateUserPoints(this.selecteduid, temp).subscribe((res) => {
+                    this.addToast('success', 'Success !', 'User updated successfully.', 5000);
+                  });
+                }
+                if (this.newStatus == "Cancelled") {
+                  //Set User Claim to milageRedeemed
+                  //Set milage Redeemed to 0
+                  let temp = {
+                    field_claimed_milage: { und: [{ value: this.invoiceToUpdate.milage_redeemed }] }
+                    // field_claimed_milage: { und: [{ value: "0" }] }
+                  };
+                  this.us.updateUserPoints(this.selecteduid, temp).subscribe((res) => {
+                    this.addToast('success', 'Success !', 'User updated successfully.', 5000);
+                  });
 
-                this.adService.updateUserPoints(this.addInvoiceSelectedUser.id, updtuserform).subscribe((res) => {
-                  if (res.status == 200) {
-                    this.addToast('success', 'Successfull !', 'Points updated !', 4000);
-                  }
-                });
+                }
 
-                stateForm = {
-                  title: 'Loyalty Points',
-                  type: 'loyalty_milage',
-                  name: this.addInvoiceSelectedUser.name,
-                  field_description: { und: [{ value: 'Against Invoice Cancellation ' + this.invoiceid }] },
-                  field_transaction_type: { und: ['Milage Deposit'] },
-                  field_milage: { und: [{ value: Math.round(this.updateredeemed) }] },
-                  field_against_invoice: { und: '[nid (' + this.invoicetoupdateid + ')]' },
-                };
-
-                this.adService.createStatement(stateForm).subscribe((sres) => {
-
-                  if (sres.status == 200) {
-                    if (this.waitToastID) {
-                      this.toastyService.clear(this.waitToastID);
-                    }
-                    this.addToast('success', 'Success !', 'Statement generated successfully.', 5000);
-                    this.openForm();
-                  } else {
-                    if (this.waitToastID) {
-                      this.toastyService.clear(this.waitToastID);
-                    }
-                    console.log(JSON.stringify(sres.data));
-                    this.addToast('error', 'Error !', JSON.stringify(sres.data), 10000);
-                  }
-
-                });
-              } else {
-                this.openForm();
               }
+              // this.adService.getAllInvoices().subscribe((res) => {
+              //   this.AllInvoices = this.adService.retrieveInvoices();
+              // });
+              // this.adService.getOfferMilage().subscribe((res) => { });
+              // if (this.selectedStatus.text == 'Cancelled' || this.selectedStatus.text=='Departed') {
+              //   let percentoffer: any = this.adService.retrieveOfferMilage();
+
+              //   let finalmilagetoadd: any = (this.netinvoicecost * parseFloat(percentoffer.percent)) / 100;
+
+              //   let floatToUpdate = parseFloat(this.adService.userDetails.float)-this.floattoredeem;
+
+              //   if(this.selectedStatus.text=='Departed'){
+              //     let updtuserform = {
+              //         field_balance: { und: [{ value: Math.round(this.updateredeemed) }] }
+              //         // field_redeemed : { und: [{ value: this.floattoredeem+"" }] },
+              //         // field_float : { und: [{ value: floatToUpdate+"" }] }
+              //       };
+
+              //       this.adService.updateUserPoints(this.addInvoiceSelectedUser.id, updtuserform).subscribe((res) => {
+              //         if (res.status == 200) {
+              //           this.addToast('success', 'Successfull !', 'Points updated !', 4000);
+              //         }
+              //       });
+              //   }
+
+              //   stateForm = {
+              //     title: 'Loyalty Points',
+              //     type: 'loyalty_milage',
+              //     name: this.addInvoiceSelectedUser.name,
+              //     field_description: { und: [{ value: 'Against Invoice Cancellation ' + this.invoiceid }] },
+              //     field_transaction_type: { und: ['Milage Deposit'] },
+              //     field_milage: { und: [{ value: Math.round(this.updateredeemed) }] },
+              //     field_against_invoice: { und: '[nid (' + this.invoicetoupdateid + ')]' },
+              //   };
+
+              //   this.adService.createStatement(stateForm).subscribe((sres) => {
+
+              //     if (sres.status == 200) {
+              //       if (this.waitToastID) {
+              //         this.toastyService.clear(this.waitToastID);
+              //       }
+              //       this.addToast('success', 'Success !', 'Statement generated successfully.', 5000);
+              //       this.openForm();
+              //     } else {
+              //       if (this.waitToastID) {
+              //         this.toastyService.clear(this.waitToastID);
+              //       }
+              //       // console.log(JSON.stringify(sres.data));
+              //       this.addToast('error', 'Error !', JSON.stringify(sres.data), 10000);
+              //     }
+
+              //   });
+              // } else {
+              //   this.openForm();
+              // }
 
             } else {
               if (this.waitToastID) {
                 this.toastyService.clear(this.waitToastID);
               }
-              console.log(JSON.stringify(inres.data));
+              // console.log(JSON.stringify(inres.data));
               this.addToast('error', 'Error !', JSON.stringify(inres.data), 10000);
             }
 
@@ -357,9 +430,9 @@ export class AdminInvoiceComponent {
 
           let newfilename: any = 'invoice_' + this.onDateDay + '_' + this.onDateMonth + '_' + this.onDateYear + tempext;
           this.finalFileObject.filepath = 'public://invoices/' + this.addInvoiceSelectedUser.id + '/' + newfilename;
-          console.log(JSON.stringify(this.finalFileObject.filepath));
+          // console.log(JSON.stringify(this.finalFileObject.filepath));
           this.adService.uploadInvoiceFile(this.finalFileObject).subscribe((res) => {
-            console.log(JSON.stringify(res.data));
+            // console.log(JSON.stringify(res.data));
             if (res.status == 200) {
               if (this.waitToastID) {
                 this.toastyService.clear(this.waitToastID);
@@ -370,7 +443,7 @@ export class AdminInvoiceComponent {
               invoiceform = {
                 title: this.invoiceid,
                 type: 'invoice',
-                name: this.addInvoiceSelectedUser.name,
+                // name: this.addInvoiceSelectedUser.name,
                 field_booked_by: { und: '[uid (' + this.addInvoiceSelectedUser.id + ')]' },
                 field_co_ordinator: { und: '[nid (' + this.addInvoiceSelectedCord.id + ')]' },
                 field_booking_for: { und: [this.selectedBookingfor.text] },
@@ -386,7 +459,36 @@ export class AdminInvoiceComponent {
                 }
               };
 
-              console.log(JSON.stringify(invoiceform));
+
+              let currentUserClaims = this.getUserClaimedMilage(this.invoiceToUpdate.user);
+
+              if (this.initialStatus != this.newStatus) {
+
+
+                if (this.initialStatus == "Cancelled") {
+                  invoiceform.field_points_redeemed = { und: [{ value: currentUserClaims }] };
+                }
+
+
+
+                if (this.selectedStatus.text == "Pending") {
+                  invoiceform.field_milage_recieved = { und: [{ value: "0" }] };
+                }
+
+                if (this.selectedStatus.text == "Completed") {
+                  invoiceform.field_milage_recieved = { und: [{ value: ((parseFloat(this.netinvoicecost) * parseFloat(this.invoiceToUpdate.milage_percent)) / 100) + '' }] };
+                }
+
+                if (this.selectedStatus.text == "Cancelled") {
+                  invoiceform.field_milage_recieved = { und: [{ value: "0" }] };
+                  invoiceform.field_points_redeemed = { und: [{ value: "0" }] };
+                }
+              }
+
+              // console.log(JSON.stringify(invoiceform));
+
+
+              // console.log(JSON.stringify(invoiceform));
 
               this.adService.updateInvoice(invoiceform, this.invoicetoupdateid).subscribe((inres) => {
                 if (inres.status == 200) {
@@ -394,60 +496,94 @@ export class AdminInvoiceComponent {
                     this.toastyService.clear(this.waitToastID);
                   }
                   this.addToast('success', 'Success !', 'Invoice saved successfully.', 5000);
-                  this.addToast('wait', 'Saving !', 'Generating statement', 50000);
-                  this.adService.getAllInvoices().subscribe((res) => {
-                    this.AllInvoices = this.adService.retrieveInvoices();
-                  });
-                  this.adService.getOfferMilage().subscribe((res) => { });
-                  if (this.selectedStatus.text == 'Cancelled') {
-                    let percentoffer: any = this.adService.retrieveOfferMilage();
 
-                    let finalmilagetoadd: number = (this.netinvoicecost * Number(percentoffer.percent)) / 100;
+                  //Edit
+                  if (this.newStatus != this.initialStatus) {
 
-                    let updtuserform = {
-                      field_balance: { und: [{ value: Math.round(this.updateredeemed) }] }
-                    };
+                    if (this.initialStatus == "Cancelled") {
+                      let temp = {
+                        field_claimed_milage: { und: [{ value: "0" }] }
+                      };
+                      this.us.updateUserPoints(this.selecteduid, temp).subscribe((res) => {
+                        this.addToast('success', 'Success !', 'User updated successfully.', 5000);
+                      });
+                    }
+                    if (this.newStatus == "Cancelled") {
+                      //Set User Claim to milageRedeemed
+                      //Set milage Redeemed to 0
+                      let temp = {
+                        field_claimed_milage: { und: [{ value: this.invoiceToUpdate.milage_redeemed }] }
+                        // field_claimed_milage: { und: [{ value: "0" }] }
+                      };
+                      this.us.updateUserPoints(this.selecteduid, temp).subscribe((res) => {
+                        this.addToast('success', 'Success !', 'User updated successfully.', 5000);
+                      });
 
-                    this.adService.updateUserPoints(this.addInvoiceSelectedUser.id, updtuserform).subscribe((res) => {
-                      if (res.status == 200) {
-                        this.addToast('success', 'Successfull !', 'Points updated !', 4000);
-                      }
-                    });
+                    }
 
-                    stateForm = {
-                      title: 'Loyalty Points',
-                      type: 'loyalty_milage',
-                      name: this.addInvoiceSelectedUser.name,
-                      field_description: { und: [{ value: this.description }] },
-                      field_transaction_type: { und: ['Milage Deposit'] },
-                      field_milage: { und: [{ value: Math.round(this.updateredeemed) }] },
-                      field_against_invoice: { und: '[nid (' + this.invoicetoupdateid + ')]' },
-                    };
-
-                    this.adService.createStatement(stateForm).subscribe((sres) => {
-
-                      if (sres.status == 200) {
-                            if (this.waitToastID) {
-                              this.toastyService.clear(this.waitToastID);
-                            }
-                            this.addToast('success', 'Success !', 'Statement generated successfully.', 5000);
-                            this.openForm();
-                      } else {
-                        this.toastyService.clear(this.waitToastID);
-                        console.log(JSON.stringify(sres.data));
-                        this.addToast('error', 'Error !', JSON.stringify(sres.data), 10000);
-                      }
-
-                    });
-
-                  } else {
-                    this.openForm();
                   }
+                  // this.addToast('wait', 'Saving !', 'Generating statement', 50000);
+                  // this.adService.getAllInvoices().subscribe((res) => {
+                  //   this.AllInvoices = this.adService.retrieveInvoices();
+                  // });
+                  // this.adService.getOfferMilage().subscribe((res) => { });
+                  // if (this.selectedStatus.text == 'Cancelled' || this.selectedStatus.text=='Departed') {
+                  //   let percentoffer: any = this.adService.retrieveOfferMilage();
+
+                  //   let finalmilagetoadd: any = (this.netinvoicecost * parseFloat(percentoffer.percent)) / 100;
+
+                  //   let floatToUpdate = parseFloat(this.adService.userDetails.float)-this.floattoredeem;
+
+                  //   if(this.selectedStatus.text=='Departed'){
+                  //       let updtuserform = {
+                  //         field_balance: { und: [{ value: Math.round(this.updateredeemed) }] }
+                  //         // field_redeemed : { und: [{ value: this.floattoredeem+"" }] },
+                  //         // field_float : { und: [{ value: floatToUpdate+"" }] }
+                  //       };
+
+                  //       this.adService.updateUserPoints(this.addInvoiceSelectedUser.id, updtuserform).subscribe((res) => {
+                  //         if (res.status == 200) {
+                  //           this.addToast('success', 'Successfull !', 'Points updated !', 4000);
+                  //         }
+                  //       });
+                  //     }
+
+
+
+                  //   stateForm = {
+                  //     title: 'Loyalty Points',
+                  //     type: 'loyalty_milage',
+                  //     name: this.addInvoiceSelectedUser.name,
+                  //     field_description: { und: [{ value: this.description }] },
+                  //     field_transaction_type: { und: ['Milage Deposit'] },
+                  //     field_milage: { und: [{ value: Math.round(this.updateredeemed) }] },
+                  //     field_against_invoice: { und: '[nid (' + this.invoicetoupdateid + ')]' },
+                  //   };
+
+                  //   this.adService.createStatement(stateForm).subscribe((sres) => {
+
+                  //     if (sres.status == 200) {
+                  //           if (this.waitToastID) {
+                  //             this.toastyService.clear(this.waitToastID);
+                  //           }
+                  //           this.addToast('success', 'Success !', 'Statement generated successfully.', 5000);
+                  //           this.openForm();
+                  //     } else {
+                  //       this.toastyService.clear(this.waitToastID);
+                  //       // console.log(JSON.stringify(sres.data));
+                  //       this.addToast('error', 'Error !', JSON.stringify(sres.data), 10000);
+                  //     }
+
+                  //   });
+
+                  // } else {
+                  //   this.openForm();
+                  // }
                 } else {
                   if (this.waitToastID) {
                     this.toastyService.clear(this.waitToastID);
                   }
-                  console.log(JSON.stringify(inres.data));
+                  // console.log(JSON.stringify(inres.data));
                   this.addToast('error', 'Error !', JSON.stringify(inres.data), 10000);
                 }
 
@@ -470,100 +606,112 @@ export class AdminInvoiceComponent {
           this.addToast('success', 'Success !', 'File uploaded successfully', 5000);
           this.addToast('wait', 'Saving !', 'Saving invoice', 50000);
 
-          invoiceform = {
-            title: this.invoiceid,
-            type: 'invoice',
-            name: this.addInvoiceSelectedUser.name,
-            field_booked_by: { und: '[uid (' + this.addInvoiceSelectedUser.id + ')]' },
-            field_co_ordinator: { und: '[nid (' + this.addInvoiceSelectedCord.id + ')]' },
-            field_booking_for: { und: [this.selectedBookingfor.text] },
-            field_invoice_cost: { und: [{ value: this.invoicecost }] },
-            field_points_redeemed: { und: [{ value: (Number(this.invoicecost) - Number(this.netinvoicecost)) }] },
-            field_description: { und: [{ value: this.description }] },
-            field_from: { und: [{ value: this.from }] },
-            field_to: { und: [{ value: this.to }] },
-            field_seats: { und: [{ value: this.seats }] },
-            field_net_invoice_amount: { und: [{ value: this.netinvoicecost + '' }] },
-            field_status: { und: [this.selectedStatus.text] },
-            field_journey_date: {
-              und: [
-                { value: { day: this.onDateDay, month: this.onDateMonth, year: this.onDateYear } }]
-            }
-          };
+          let milageForType = this.adService.retrieveOfferMilageAccordingToType(this.selectedBookingfor.text);
+          return this.totalRecievedMilage(this.addInvoiceSelectedUser).then((totalMilages) => {
 
-          console.log(JSON.stringify(invoiceform));
 
-          this.adService.uploadInvoice(invoiceform).subscribe((inres) => {
-            if (inres.status == 200) {
-              if (this.waitToastID) {
-                this.toastyService.clear(this.waitToastID);
+            // nahi ara are us din t
+            console.log(JSON.stringify(totalMilages))
+            let milageBalance: number = parseFloat(totalMilages['totalMilage']) - parseFloat(totalMilages['totalRedeemed']);
+
+            // console.log("TOTALS : "+ parseFloat(totalMilages['totalMilage'])+" "+parseFloat(totalMilages['totalRedeemed']));
+
+            //Yeh Return kaise kar raha hai? Function band ho jayega na? aisehi return hai woh kaam ka nahi
+            //But function isse aage kaise badh raha hai? uske andar hai then
+            return this.getUserClaimedMilage(this.addInvoiceSelectedUser).then((milageToBeRedeemed) => {
+              //OK // aya kya? Haa
+              //   let milageToBeRedeemed = this.getUserClaimedMilage(this.addInvoiceSelectedUser) || 0;
+              console.log(milageBalance + "Milage Balance");
+              console.log(milageToBeRedeemed + " Milage To Be Redeemed");
+              if (milageBalance < milageToBeRedeemed) {
+                console.log("Reached here 2");
+                return;
               }
-              this.addToast('success', 'Success !', 'Invoice saved successfully.', 5000);
-              this.addToast('wait', 'Saving !', 'Generating statement', 50000);
-              this.adService.getAllInvoices().subscribe((res) => {
-                this.AllInvoices = this.adService.retrieveInvoices();
-              });
-              this.adService.getOfferMilage().subscribe((res) => { });
-              let percentoffer: any = this.adService.retrieveOfferMilage();
 
-              let finalmilagetoadd: number = (this.netinvoicecost * Number(percentoffer.percent)) / 100;
 
-              let updtuserform = {
-                field_balance: { und: [{ value: Math.round(finalmilagetoadd) }] }
-              };
 
-              this.adService.updateUserPoints(this.addInvoiceSelectedUser.id, updtuserform).subscribe((res) => {
-                if (res.status == 200) {
-                  this.addToast('success', 'Successfull !', 'Points updated !', 4000);
-                }
-              });
-
-              stateForm = {
-                title: 'Loyalty Points',
-                type: 'loyalty_milage',
-                name: this.addInvoiceSelectedUser.name,
+              invoiceform = {
+                field_milage_percent: { und: [{ value: milageForType }] },
+                title: this.invoiceid,
+                type: 'invoice',
+                // name: this.addInvoiceSelectedUser.name,
+                field_user: { und: '[uid (' + this.addInvoiceSelectedUser.id + ')]' },
+                field_booked_by: { und: '[uid (' + this.addInvoiceSelectedUser.id + ')]' },
+                field_co_ordinator: { und: '[nid (' + this.addInvoiceSelectedCord.id + ')]' },
+                field_booking_for: { und: [this.selectedBookingfor.text] },
+                field_invoice_cost: { und: [{ value: this.invoicecost }] },
+                field_points_redeemed: { und: [{ value: milageToBeRedeemed }] },
                 field_description: { und: [{ value: this.description }] },
-                field_transaction_type: { und: ['Milage Deposit'] },
-                field_milage: { und: [{ value: Math.round(finalmilagetoadd) }] },
-                field_against_invoice: { und: '[nid (' + inres.data.nid + ')]' },
+                field_from: { und: [{ value: this.from }] },
+                field_to: { und: [{ value: this.to }] },
+                field_seats: { und: [{ value: this.seats }] },
+                field_net_invoice_amount: { und: [{ value: this.invoicecost + '' }] },
+                field_status: { und: [this.selectedStatus.text] },
+                field_journey_date: {
+                  und: [
+                    { value: { day: this.onDateDay, month: this.onDateMonth, year: this.onDateYear } }]
+                }
               };
 
-              this.adService.createStatement(stateForm).subscribe((sres) => {
+              if (this.selectedStatus.text == "Pending") {
+                invoiceform.field_milage_recieved = { und: [{ value: "0" }] };
+                let NetInvoiceCost = parseFloat(invoiceform.field_invoice_cost.und[0].value) - milageToBeRedeemed;
+                invoiceform.field_net_invoice_amount = { und: [{ value: NetInvoiceCost }] };
+              }
 
-                if (sres.status == 200) {
-                  let rsForm = {
-                        title: 'Loyalty Points',
-                        type: 'loyalty_milage',
-                        name: this.addInvoiceSelectedUser.name,
-                        field_description: { und: [{ value: tempUser.description }] },
-                        field_transaction_type: { und: ['Milage Redeemed'] },
-                        field_milage: { und: [{ value: this.floattoredeem }] },
-                        field_against_invoice: { und: '[nid (' + inres.data.nid + ')]' },
-                      };
+              if (this.selectedStatus.text == "Completed") {
+                let NetInvoiceCost = parseFloat(invoiceform.field_invoice_cost.und[0].value) - milageToBeRedeemed;
+                invoiceform.field_net_invoice_amount = { und: [{ value: NetInvoiceCost }] };
+                invoiceform.field_milage_recieved = { und: [{ value: parseInt(((NetInvoiceCost * parseFloat(milageForType)) / 100) + '') }] };
+              }
 
-                      this.adService.createStatement(rsForm).subscribe(data => {
-                        if (this.waitToastID) {
-                          this.toastyService.clear(this.waitToastID);
-                        }
-                        this.addToast('success', 'Success !', 'Statement generated successfully.', 5000);
-                        this.openForm();
-                      });
+              if (this.selectedStatus.text == "Cancelled") {
+                invoiceform.field_milage_recieved = { und: [{ value: "0" }] };
+                invoiceform.field_points_redeemed = { und: [{ value: "0" }] };
+              }
+
+              // console.log(JSON.stringify(invoiceform));
+
+              this.adService.uploadInvoice(invoiceform).subscribe((inres) => {
+                if (inres.status == 200) {
+                  if (this.waitToastID) {
+                    this.toastyService.clear(this.waitToastID);
+                  }
+
+
+                  this.addToast('success', 'Success !', 'Invoice saved successfully.', 5000);
+
+                  if (this.selectedStatus.text == "Pending" || this.selectedStatus.text == "Completed") {
+                    // yaha user update karega waha relect hoga okToh rukh lemme think
+                    // chai pike aya ok ok?
+                    // kya baat hai akash tuje object padhna nahi ata
+                    //Bored + Tried ho gya? try karte hai? file ipload mein bhi dal diya? Test karte hai pehle hmm
+
+                    let totalRecieved = parseFloat(totalMilages['totalMilage']) + parseInt(invoiceform.field_milage_recieved.und[0].value);
+                    // console.log("Total Milage Recieved "+ parseFloat(totalMilages['totalMilage']) + " + "+ parseFloat(invoiceform.field_milage_recieved.und[0].value) + " =  " + totalRecieved );
+                    let totalRedeemed = parseFloat(totalMilages['totalRedeemed']) + parseFloat(invoiceform.field_points_redeemed.und[0].value);
+                    let totalBalance = totalRecieved - totalRedeemed;
+                    let temp = {
+                      field_balance: { und: [{ value: totalBalance }] },
+                      field_claimed_milage: { und: [{ value: "0" }] },
+                      field_redeemed: { und: [{ value: totalRedeemed }] },
+                      field_recieved: { und: [{ value: totalRecieved }] }
+                    };
+                    this.us.updateUserPoints(this.addInvoiceSelectedUser.id, temp).subscribe((res) => {
+                      this.addToast('success', 'Success !', 'User updated successfully.', 5000);
+                    });
+                  }
+
                 } else {
                   if (this.waitToastID) {
                     this.toastyService.clear(this.waitToastID);
                   }
-                  console.log(JSON.stringify(sres.data));
-                  this.addToast('error', 'Error !', JSON.stringify(sres.data), 10000);
+                  // console.log(JSON.stringify(inres.data));
+                  this.addToast('error', 'Error !', JSON.stringify(inres.data), 10000);
                 }
 
               });
-            } else {
-              if (this.waitToastID) {
-                this.toastyService.clear(this.waitToastID);
-              }
-              console.log(JSON.stringify(inres.data));
-              this.addToast('error', 'Error !', JSON.stringify(inres.data), 10000);
-            }
+            });
 
           });
         } else {
@@ -577,31 +725,58 @@ export class AdminInvoiceComponent {
 
           let newfilename: any = 'invoice_' + this.onDateDay + '_' + this.onDateMonth + '_' + this.onDateYear + tempext;
           this.finalFileObject.filepath = 'public://invoices/' + this.addInvoiceSelectedUser.id + '/' + newfilename;
-          console.log(JSON.stringify(this.finalFileObject.filepath));
+          // console.log(JSON.stringify(this.finalFileObject.filepath));
           this.adService.uploadInvoiceFile(this.finalFileObject).subscribe((res) => {
-            console.log(JSON.stringify(res.data));
+            // console.log(JSON.stringify(res.data));
             if (res.status == 200) {
               if (this.waitToastID) {
                 this.toastyService.clear(this.waitToastID);
               }
+              // field_invoice_file: { und: [{ fid: res.data.fid }] },
               this.addToast('success', 'Success !', 'File uploaded successfully', 5000);
               this.addToast('wait', 'Saving !', 'Saving invoice', 50000);
 
+              let milageForType = this.adService.retrieveOfferMilageAccordingToType(this.selectedBookingfor.text);
+          return this.totalRecievedMilage(this.addInvoiceSelectedUser).then((totalMilages) => {
+
+
+            // nahi ara are us din t
+            console.log(JSON.stringify(totalMilages))
+            let milageBalance: number = parseFloat(totalMilages['totalMilage']) - parseFloat(totalMilages['totalRedeemed']);
+
+            // console.log("TOTALS : "+ parseFloat(totalMilages['totalMilage'])+" "+parseFloat(totalMilages['totalRedeemed']));
+
+            //Yeh Return kaise kar raha hai? Function band ho jayega na? aisehi return hai woh kaam ka nahi
+            //But function isse aage kaise badh raha hai? uske andar hai then
+            return this.getUserClaimedMilage(this.addInvoiceSelectedUser).then((milageToBeRedeemed) => {
+              //OK // aya kya? Haa
+              //   let milageToBeRedeemed = this.getUserClaimedMilage(this.addInvoiceSelectedUser) || 0;
+              console.log(milageBalance + "Milage Balance");
+              console.log(milageToBeRedeemed + " Milage To Be Redeemed");
+              if (milageBalance < milageToBeRedeemed) {
+                console.log("Reached here 2");
+                return;
+              }
+
+
+
               invoiceform = {
+                field_milage_percent: { und: [{ value: milageForType }] },
                 title: this.invoiceid,
                 type: 'invoice',
-                name: this.addInvoiceSelectedUser.name,
+                // name: this.addInvoiceSelectedUser.name,
+                field_user: { und: '[uid (' + this.addInvoiceSelectedUser.id + ')]' },
                 field_booked_by: { und: '[uid (' + this.addInvoiceSelectedUser.id + ')]' },
                 field_co_ordinator: { und: '[nid (' + this.addInvoiceSelectedCord.id + ')]' },
                 field_booking_for: { und: [this.selectedBookingfor.text] },
                 field_invoice_cost: { und: [{ value: this.invoicecost }] },
-                field_points_redeemed: { und: [{ value: (Number(this.invoicecost) - Number(this.netinvoicecost)) }] },
+                field_points_redeemed: { und: [{ value: milageToBeRedeemed }] },
                 field_description: { und: [{ value: this.description }] },
                 field_from: { und: [{ value: this.from }] },
                 field_to: { und: [{ value: this.to }] },
                 field_seats: { und: [{ value: this.seats }] },
                 field_invoice_file: { und: [{ fid: res.data.fid }] },
-                field_net_invoice_amount: { und: [{ value: this.netinvoicecost + '' }] },
+                field_net_invoice_amount: { und: [{ value: this.invoicecost + '' }] },
                 field_status: { und: [this.selectedStatus.text] },
                 field_journey_date: {
                   und: [
@@ -609,91 +784,67 @@ export class AdminInvoiceComponent {
                 }
               };
 
-              console.log(JSON.stringify(invoiceform));
+              if (this.selectedStatus.text == "Pending") {
+                invoiceform.field_milage_recieved = { und: [{ value: "0" }] };
+                let NetInvoiceCost = parseFloat(invoiceform.field_invoice_cost.und[0].value) - milageToBeRedeemed;
+                invoiceform.field_net_invoice_amount = { und: [{ value: NetInvoiceCost }] };
+              }
+
+              if (this.selectedStatus.text == "Completed") {
+                let NetInvoiceCost = parseFloat(invoiceform.field_invoice_cost.und[0].value) - milageToBeRedeemed;
+                invoiceform.field_net_invoice_amount = { und: [{ value: NetInvoiceCost }] };
+                invoiceform.field_milage_recieved = { und: [{ value: parseInt(((NetInvoiceCost * parseFloat(milageForType)) / 100) + '') }] };
+              }
+
+              if (this.selectedStatus.text == "Cancelled") {
+                invoiceform.field_milage_recieved = { und: [{ value: "0" }] };
+                invoiceform.field_points_redeemed = { und: [{ value: "0" }] };
+              }
+
+              // console.log(JSON.stringify(invoiceform));
 
               this.adService.uploadInvoice(invoiceform).subscribe((inres) => {
                 if (inres.status == 200) {
                   if (this.waitToastID) {
                     this.toastyService.clear(this.waitToastID);
                   }
+
+
                   this.addToast('success', 'Success !', 'Invoice saved successfully.', 5000);
-                  this.addToast('wait', 'Saving !', 'Generating statement', 50000);
-                  this.adService.getAllInvoices().subscribe((res) => {
-                    this.AllInvoices = this.adService.retrieveInvoices();
-                  });
-                  this.adService.getOfferMilage().subscribe((res) => { });
-                  let percentoffer: any = this.adService.retrieveOfferMilage();
 
-                  let finalmilagetoadd: number = (this.netinvoicecost * Number(percentoffer.percent)) / 100;
+                  if (this.selectedStatus.text == "Pending" || this.selectedStatus.text == "Completed") {
+                    // yaha user update karega waha relect hoga okToh rukh lemme think
+                    // chai pike aya ok ok?
+                    // kya baat hai akash tuje object padhna nahi ata
+                    //Bored + Tried ho gya? try karte hai? file ipload mein bhi dal diya? Test karte hai pehle hmm
 
-                  let updtuserform = {
-                    field_balance: { und: [{ value: Math.round(finalmilagetoadd) }] }
-                  };
+                    let totalRecieved = parseFloat(totalMilages['totalMilage']) + parseInt(invoiceform.field_milage_recieved.und[0].value);
+                    // console.log("Total Milage Recieved "+ parseFloat(totalMilages['totalMilage']) + " + "+ parseFloat(invoiceform.field_milage_recieved.und[0].value) + " =  " + totalRecieved );
+                    let totalRedeemed = parseFloat(totalMilages['totalRedeemed']) + parseFloat(invoiceform.field_points_redeemed.und[0].value);
+                    let totalBalance = totalRecieved - totalRedeemed;
+                    let temp = {
+                      field_balance: { und: [{ value: totalBalance }] },
+                      field_claimed_milage: { und: [{ value: "0" }] },
+                      field_redeemed: { und: [{ value: totalRedeemed }] },
+                      field_recieved: { und: [{ value: totalRecieved }] }
+                    };
+                    this.us.updateUserPoints(this.addInvoiceSelectedUser.id, temp).subscribe((res) => {
+                      this.addToast('success', 'Success !', 'User updated successfully.', 5000);
+                    });
+                  }
 
-                  this.adService.updateUserPoints(this.addInvoiceSelectedUser.id, updtuserform).subscribe((res) => {
-                    if (res.status == 200) {
-                      this.addToast('success', 'Successfull !', 'Points updated !', 4000);
-                    }
-                  });
-
-                  stateForm = {
-                    title: 'Loyalty Points',
-                    type: 'loyalty_milage',
-                    name: this.addInvoiceSelectedUser.name,
-                    field_description: { und: [{ value: tempUser.description }] },
-                    field_transaction_type: { und: ['Milage Deposit'] },
-                    field_milage: { und: [{ value: Math.round(finalmilagetoadd) }] },
-                    field_against_invoice: { und: '[nid (' + inres.data.nid + ')]' },
-                  };
-
-
-
-                  this.adService.createStatement(stateForm).subscribe((sres) => {
-                    
-
-
-                    if (sres.status == 200) {
-
-                      let rsForm = {
-                        title: 'Loyalty Points',
-                        type: 'loyalty_milage',
-                        name: this.addInvoiceSelectedUser.name,
-                        field_description: { und: [{ value: tempUser.description }] },
-                        field_transaction_type: { und: ['Milage Redeemed'] },
-                        field_milage: { und: [{ value: this.floattoredeem }] },
-                        field_against_invoice: { und: '[nid (' + inres.data.nid + ')]' },
-                      };
-
-                      this.adService.createStatement(rsForm).subscribe(data => {
-                        if (this.waitToastID) {
-                          this.toastyService.clear(this.waitToastID);
-                        }
-                        this.addToast('success', 'Success !', 'Statement generated successfully.', 5000);
-                        this.openForm();
-                      });
-
-
-                      
-                    } else {
-                      if (this.waitToastID) {
-                        this.toastyService.clear(this.waitToastID);
-                      }
-                      console.log(JSON.stringify(sres.data));
-                      this.addToast('error', 'Error !', JSON.stringify(sres.data), 10000);
-                    }
-
-                  });
                 } else {
                   if (this.waitToastID) {
                     this.toastyService.clear(this.waitToastID);
                   }
-                  console.log(JSON.stringify(inres.data));
+                  // console.log(JSON.stringify(inres.data));
                   this.addToast('error', 'Error !', JSON.stringify(inres.data), 10000);
                 }
 
               });
+            });
 
-
+          });
 
             } else {
               this.addToast('error', 'Error !', 'Error uploading file.', 10000);
@@ -710,8 +861,8 @@ export class AdminInvoiceComponent {
   selectuid(val: any) {
 
     if (val.length) {
-      this.addInvoiceSelectedUser = this.adService.retrieveUserByUnique(val);
-      this.allcoords = this.adService.retrieveCordsForUser(val);
+      this.addInvoiceSelectedUser = this.adService.retrieveUserByUnique(val.replace(/^0+/, ''));
+      this.allcoords = this.adService.retrieveCordsForUser(val.replace(/^0+/, ''));
       if (this.addInvoiceSelectedUser != undefined) {
         this.floattoredeem = this.addInvoiceSelectedUser.float;
       }
@@ -780,7 +931,7 @@ export class AdminInvoiceComponent {
     myReader.readAsDataURL(this.file);
   }
 
-  public deleteInvoice(nid: string) {
+  deleteInvoice(nid: string) {
     this.swalService.swal({
       title: 'Are you sure?',
       text: 'All user data will be erased !',
@@ -793,7 +944,7 @@ export class AdminInvoiceComponent {
     }).then((button) => {
       if (button) {
         this.addToast('wait', 'Deleting Invoice', 'Thrashing Invoice Data', 30000);
-        this.adService.deleteNode(nid).subscribe((res) => {
+        this.adService.deleteInvoice(nid, "invoice").then((res) => {
           this.toastyService.clear(this.waitToastID);
           this.refresInvoices();
           this.addToast('success', 'Success', 'Invoice Removed Successfully !!!', 8000);
@@ -805,14 +956,14 @@ export class AdminInvoiceComponent {
 
   }
 
-  public refresInvoices() {
+  refresInvoices() {
     this.adService.getAllInvoices().subscribe((res) => {
       this.AllInvoices = this.adService.retrieveInvoices();
     });
   }
 
 
-  public addToast(type: any, rtitle: string, message: string, timeout: number) {
+  addToast(type: any, rtitle: string, message: string, timeout: any) {
     // Just add default Toast with title only
     // Or create the instance of ToastOptions
     var toastOptions: ToastOptions = {
@@ -822,7 +973,6 @@ export class AdminInvoiceComponent {
       theme: 'default',
       timeout: timeout,
       onAdd: (toast: ToastData) => {
-        console.log('Toast ' + toast.id + ' has been added!');
         if (type == 'wait') {
           this.waitToastID = toast.id;
         } else if (type == 'success') {
@@ -833,7 +983,6 @@ export class AdminInvoiceComponent {
 
       },
       onRemove: function (toast: ToastData) {
-        console.log('Toast ' + toast.id + ' has been removed!');
         if (type == 'wait') {
           this.waitToastID = null;
         } else if (type == 'success') {
@@ -853,10 +1002,17 @@ export class AdminInvoiceComponent {
     }
   }
 
-  public selected(value: any, type: string): void {
+  selected(value: any, type: string): void {
     if (type == 'status') {
       this.selectedStatus = value;
+      this.newStatus = value.text;
     } else if (type == 'bookingfor') {
+
+      if (value.text == 'Car' || value.text == 'Bus' || value.text == 'Train' || value.text == 'Flight') {
+        this.fromTrue = true;
+      } else {
+        this.fromTrue = false;
+      }
       this.selectedBookingfor = value;
     } else if (type == 'allcoords') {
       this.selectedCord = value;
@@ -864,7 +1020,7 @@ export class AdminInvoiceComponent {
     }
   }
 
-  public removed(value: any, type: string): void {
+  removed(value: any, type: string): void {
     if (type == 'status') {
       this.selectedStatus = '';
     } else if (type == 'bookingfor') {
@@ -875,10 +1031,16 @@ export class AdminInvoiceComponent {
     }
   }
 
-  public refreshValue(value: any, type: string): void {
+  refreshValue(value: any, type: string): void {
     if (type == 'status') {
       this.selectedStatus = value;
+      this.newStatus = value.text;
     } else if (type == 'bookingfor') {
+      if (value.text == 'Car' || value.text == 'Bus' || value.text == 'Train' || value.text == 'Flight') {
+        this.fromTrue = true;
+      } else {
+        this.fromTrue = false;
+      }
       this.selectedBookingfor = value;
     } else if (type == 'allcoords') {
       this.selectedCord = value;
@@ -886,6 +1048,50 @@ export class AdminInvoiceComponent {
     }
   }
 
+  totalRecievedMilage(user: any) {
+
+    let promise = new Promise((resolve, reject) => {
+      this.adService.getAllInvoices(user.id).subscribe((res) => {
+        let Totals = {
+          totalMilage: 0,
+          totalRedeemed: 0
+        }
+        let totalMilage: number;
+        this.adService.AllInvoicesByUser.forEach(element => {
+
+          Totals.totalMilage = Totals.totalMilage + parseFloat(element.milage_recieved);
+          Totals.totalRedeemed = Totals.totalRedeemed + parseFloat(element.milage_redeemed);
+
+        });
+        resolve(Totals);
+      });
+    });
+
+    return promise;
+  }
+
+  getUserClaimedMilage(user: any): any {
+
+    let promise = new Promise((resolve, reject) => {
+      // console.log("User Claimed Milage"+ user.id);
+      this.us.getUser(user.id, false).subscribe((res) => {
+        console.log("Return user milage " + JSON.stringify(res));
+        resolve(res.data.claimed || 0);
+      });
+    });
+
+    return promise;
+  }
+
+  totalRedeemedMilage(user: any) {
+    return this.adService.getAllInvoices(user).subscribe((res) => {
+      let totalMilage: number;
+      this.adService.AllInvoicesByUser.forEach(element => {
+        totalMilage = totalMilage + parseFloat(element.milage_redeemed);
+      });
+      return totalMilage;
+    });
+  }
 
 
 }

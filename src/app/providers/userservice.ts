@@ -18,7 +18,7 @@ export class UserService {
     public allSlides: any = [];
     public allCords: any = [];
     public maskUser: any = {};
-    public path: string = "http://www.acecosmos.com/panorama/rest/";
+    public path: string = "http://www.panoramaclubholidays.com/manage/rest/";
     // private activeUser = {'uid':'','name':'','mail':'','timezone':'','roles':{}};
 
     //this.storage.retrieve('activeUser') this.storage.store('usecookie',this.usecookie);
@@ -77,12 +77,12 @@ export class UserService {
             .map((result: Response) => {
                 const datai = result.json();
                 if (mask == true) {
-                    this.maskDetails = { "mail": datai.mail, "name": datai.name, "roles": datai.roles, "unique": (datai.field_unique_number.und ? datai.field_unique_number.und[0].value : null), "text": datai.name, "id": datai.uid, "balance": ((datai.field_balance.und) ? datai.field_balance.und[0].value : null), "charged": ((datai.field_charged.und) ? datai.field_charged.und[0].value : null), "float": ((datai.field_float.und) ? datai.field_float.und[0].value : null), "redeemed": ((datai.field_redeemed.und) ? datai.field_redeemed.und[0].value : null), "uid": datai.uid };
+                    this.maskDetails = { "mail": datai.mail, "name": datai.name, "roles": datai.roles, "unique": (datai.field_unique_number.und ? datai.field_unique_number.und[0].value : null), "text": datai.name, "id": datai.uid, "balance": ((datai.field_balance.und) ? datai.field_balance.und[0].value : null), "charged": ((datai.field_charged.und) ? datai.field_charged.und[0].value : null), "float": ((datai.field_claimed_milage.und) ? datai.field_claimed_milage.und[0].value : null), "redeemed": ((datai.field_redeemed.und) ? datai.field_redeemed.und[0].value : null), "claimed": ((datai.field_claimed_milage.und) ? datai.field_claimed_milage.und[0].value : null), "uid": datai.uid };
 
                     console.log(JSON.stringify(this.maskDetails));
                     return { success: result.ok, status: result.status, data: this.maskDetails };
                 } else {
-                    this.userDetails = { "mail": datai.mail, "name": datai.name, "roles": datai.roles, "unique": (datai.field_unique_number.und ? datai.field_unique_number.und[0].value : null), "text": datai.name, "id": datai.uid, "balance": ((datai.field_balance.und) ? datai.field_balance.und[0].value : null), "charged": ((datai.field_charged.und) ? datai.field_charged.und[0].value : null), "float": ((datai.field_float.und) ? datai.field_float.und[0].value : null), "redeemed": ((datai.field_redeemed.und) ? datai.field_redeemed.und[0].value : null), "uid": datai.uid };
+                    this.userDetails = { "mail": datai.mail, "name": datai.name, "roles": datai.roles, "unique": (datai.field_unique_number.und ? datai.field_unique_number.und[0].value : null), "text": datai.name, "id": datai.uid, "balance": ((datai.field_balance.und) ? datai.field_balance.und[0].value : null), "charged": ((datai.field_charged.und) ? datai.field_charged.und[0].value : null), "float": ((datai.field_claimed_milage.und) ? datai.field_claimed_milage.und[0].value : null), "redeemed": ((datai.field_redeemed.und) ? datai.field_redeemed.und[0].value : null), "claimed": ((datai.field_claimed_milage.und) ? datai.field_claimed_milage.und[0].value : null), "uid": datai.uid };
 
                     console.log(JSON.stringify(this.userDetails));
                     return { success: result.ok, status: result.status, data: this.userDetails };
@@ -115,7 +115,7 @@ export class UserService {
         //const body = JSON.stringify(message);
         const headers = new Headers({ 'Content-Type': 'application/json' });
 
-        return this._http.post('http://www.acecosmos.com/panorama/rest/user/login', formData, { headers: headers })
+        return this._http.post('http://www.panoramaclubholidays.com/manage/rest/user/login', formData, { headers: headers })
             .map((result: Response) => {
                 const data = result.json();
                 this.ss.encrypt(formData);
@@ -127,12 +127,20 @@ export class UserService {
 
     }
 
-    getStatements(id: any) {
+    getStatements(id: any,type:any) {
         const headers = new Headers({ 'Content-Type': 'application/json' });
         this.ss.createAuthorizationHeader(headers);
         let options = new RequestOptions({ headers: headers });
 
-        return this._http.get(this.path + 'loyalty?args[0]=' + id, options)
+        let query;
+
+        if(type== "fromInvoiceID"){
+            query = 'loyalty?args[0]=all&args[1]='
+        }else{
+            query = 'loyalty?args[0]=';
+        }
+
+        return this._http.get(this.path + query + id, options)
             .map((result: Response) => {
                 const datai = result.json();
                 this.allStatesments = datai;
@@ -183,7 +191,7 @@ export class UserService {
                 const data = result.json();
                 return 'ok';
             }, err => {
-                console.log(err);
+                // console.log(err);
             });
     }
 
@@ -199,7 +207,7 @@ export class UserService {
                 const datai = result.json();
                 return { status: result.status, data: datai };
             }, err => {
-                console.log(err);
+                // console.log(err);
             });
     }
 
@@ -213,7 +221,7 @@ export class UserService {
         return this._http.post(this.path + 'node', formData, options)
             .map((result: Response) => {
                 const datai = result.json();
-                console.log(JSON.stringify(datai));
+                // console.log(JSON.stringify(datai));
                 return { success: true, data: datai };
             }, err => {
                 return { success: false, data: err };
@@ -229,39 +237,39 @@ export class UserService {
         console.log(JSON.stringify(headers));
         let formData = '{}';
         let options = new RequestOptions({ headers: headers });
-        return this._http.post('http://www.acecosmos.com/panorama/rest/user/logout', formData, options)
+        return this._http.post('http://www.panoramaclubholidays.com/manage/rest/user/logout', formData, options)
             .map((result: Response) => {
                 const data = result.json();
-                console.log(JSON.stringify(data));
+                // console.log(JSON.stringify(data));
                 this.clearSession(data);
                 return "ok";
             }, err => {
-                console.log(err);
+                // console.log(err);
             });
 
     }
 
     getToken() {
 
-        return this._http.get('http://www.acecosmos.com/panorama/services/session/token')
+        return this._http.get('http://www.panoramaclubholidays.com/manage/services/session/token')
             .map((result: Response) => {
                 const data = result.json();
 
             }, err => {
-                console.log(err);
+                // console.log(err);
             });
 
     }
 
     loggedInToken() {
 
-        return this._http.get('http://www.acecosmos.com/panorama/rest/system/connect')
+        return this._http.get('http://www.panoramaclubholidays.com/manage/rest/system/connect')
             .map((result: Response) => {
                 const data = result.json();
 
                 return 'ok';
             }, err => {
-                console.log(err);
+                // console.log(err);
             });
     }
 
@@ -296,7 +304,7 @@ export class UserService {
                 const data = result.json();
                 return 'ok';
             }, err => {
-                console.log(err);
+                // console.log(err);
             });
 
     }

@@ -49,7 +49,7 @@ export class UserRedeemComponent {
 
   submitRedeem(type: string, val: number) {
 
-    let float: number = Number(this.userDetails.float); let balance: number = Number(this.userDetails.balance);
+    let float: any = parseFloat(this.userDetails.float); let balance: any = parseFloat(this.userDetails.balance);
 
     if (type == 'withdraw') {
       float = float + val;
@@ -57,11 +57,16 @@ export class UserRedeemComponent {
     } else if (type == 'cancel') {
       float = float - val;
       balance = balance + val;
+
+      if(float < 0){
+        this.addToast('error', 'Error !', 'Insufficient Balance !', 8000);
+        return;
+      }
     }
 
     if (balance >= 0) {
       let form = {
-        field_float: { und: [{ value: float }] },
+        field_claimed_milage: { und: [{ value: float }] },
         field_balance: { und: [{ value: balance }] }
       };
 

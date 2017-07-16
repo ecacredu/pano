@@ -1,0 +1,268 @@
+* {
+    margin: 0;
+    padding: 0
+}
+html, body {
+    width: 100%;
+    height: 100%
+}
+.fullPage {
+    width: 100%;
+    height: 100%
+}
+.fullPage .banner {
+    width: 100%;
+    height: 60%;
+    background-image: url("assets/img/INTBANNER.jpg");
+    background-size: 100% 100%
+}
+.fullPage .banner .circlediv {
+    position: absolute;
+    width: 18%;
+    left: 41%;
+    top: 8%
+}
+.fullPage .banner .circlediv img {
+    width: 100%
+}
+.fullPage .banner .circlediv .textfield {
+    width: 90%;
+    border: 0;
+    text-align: center;
+    line-height: 2.5;
+    border-radius: 8px;
+    outline: none;
+    margin-left: 5%;
+    margin-top: 4%
+}
+.fullPage .grouptours {
+    margin-top: 6%;
+    width: 100%;
+    min-height: 50%
+}
+.fullPage .grouptours .title {
+    width: 100%
+}
+.fullPage .grouptours .title hr.style {
+    padding: 0;
+    border: none;
+    border-top: 1px solid black;
+    color: black;
+    text-align: center
+}
+.fullPage .grouptours .title hr.style:after {
+    content: "GROUP TOURS";
+    display: inline-block;
+    position: relative;
+    top: -0.75em;
+    font-size: 25px;
+    padding: 0 0.1em;
+    background: white
+}
+
+.fullPage .customtours .title hr.style:after {
+    content: "CUSTOM TOURS";
+}
+.fullPage .tailoredtours .title hr.style:after {
+    content: "TAILORED TOURS";
+}
+.fullPage .grouptours .grid {
+    width: 100%;
+    margin-top: 2%
+}
+.fullPage .grouptours .grid .grouptoursgrid {
+    width: 88%;
+    margin-left: 6%
+}
+.fullPage .grouptours .grid .grouptoursgrid .tours {
+    margin-top: 3.8%
+}
+.fullPage .grouptours .grid .grouptoursgrid .tours .singletour {
+    width: 83.57%;
+    margin-left: 8.215%;
+    height: 185px;
+    opacity: 0;
+    transform: translateX(20px);
+    transition: all 0.3s ease-in-out
+}
+.fullPage .grouptours .grid .grouptoursgrid .tours .singletour img {
+    width: 100%;
+    height: 100%
+}
+.fullPage .grouptours .grid .grouptoursgrid .tours .singletour .blackStrip {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    text-align: center;
+    bottom: 0;
+    width: 100%
+}
+.fullPage .grouptours .grid .grouptoursgrid .tours .singletour .blackStrip p {
+    line-height: 3;
+    word-break: break-all
+}
+.fullPage .grouptours .grid .grouptoursgrid .tours .is-showing {
+    opacity: 1;
+    transform: translateX(0px)
+}
+.fullPage .fixedtours {
+    margin-top: 6%;
+    width: 100%;
+    min-height: 50%;
+    margin-bottom: 6%
+}
+.fullPage .fixedtours .title {
+    width: 100%
+}
+.fullPage .fixedtours .title hr.style {
+    padding: 0;
+    border: none;
+    border-top: 1px solid black;
+    color: black;
+    text-align: center
+}
+.fullPage .fixedtours .title hr.style:after {
+    content: "FIXED TOURS";
+    display: inline-block;
+    position: relative;
+    top: -0.75em;
+    font-size: 25px;
+    padding: 0 0.1em;
+    background: white
+}
+.fullPage .customtours .title hr.style:after {
+    content: "CUSTOM TOURS";
+}
+.fullPage .tailoredtours .title hr.style:after {
+    content: "TAILORED TOURS";
+}
+.fullPage .fixedtours .grid {
+    width: 100%;
+    margin-top: 2%
+}
+.fullPage .fixedtours .grid .grouptoursgrid {
+    width: 88%;
+    margin-left: 6%
+}
+.fullPage .fixedtours .grid .grouptoursgrid .tours {
+    margin-top: 3.8%
+}
+.fullPage .fixedtours .grid .grouptoursgrid .tours .singlefixedtour {
+    width: 83.57%;
+    margin-left: 8.215%;
+    height: 185px;
+    opacity: 0;
+    transform: translateX(20px);
+    transition: all 0.3s ease-in-out
+}
+.fullPage .fixedtours .grid .grouptoursgrid .tours .singlefixedtour img {
+    width: 100%;
+    height: 100%
+}
+.fullPage .fixedtours .grid .grouptoursgrid .tours .singlefixedtour .blackStrip {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    text-align: center;
+    bottom: 0;
+    width: 100%
+}
+.fullPage .fixedtours .grid .grouptoursgrid .tours .singlefixedtour .blackStrip p {
+    line-height: 3;
+    word-break: break-all
+}
+.fullPage .fixedtours .grid .grouptoursgrid .tours .is-showing {
+    opacity: 1;
+    transform: translateX(0px)
+}
+.modalDiv .modalcontent {
+    width: 62.225%;
+    left: 18.8875%;
+    height: 90.885%;
+    top: 4.5575%
+}
+.modalDiv .modalcontent .closeButton {
+    outline: none;
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin-right: 0.5%;
+    opacity: 0.5
+}
+.modalDiv .modalcontent .modalbody {
+    width: 94%;
+    height: 94%;
+    overflow-y: auto;
+    left: 3%;
+    top: 3%;
+    border-radius: 7px
+}
+.modalDiv .modalcontent .modalbody .tourImage {
+    width: 100%;
+    height: 60%;
+    border-radius: 7px;
+    overflow: hidden
+}
+.modalDiv .modalcontent .modalbody .tourImage img {
+    width: 100%;
+    height: 100%
+}
+.modalDiv .modalcontent .modalbody .aboutTour {
+    width: 96%;
+    margin-left: 2%;
+    margin-top: 4%
+}
+.modalDiv .modalcontent .modalbody .aboutTour .tourDetails {
+    width: 100%
+}
+.modalDiv .modalcontent .modalbody .aboutTour .tourDetails .heading {
+    font-size: 24px
+}
+.modalDiv .modalcontent .modalbody .aboutTour .tourDetails .description {
+    font-size: 16px;
+    margin-top: 1.5%
+}
+.modalDiv .modalcontent .modalbody .aboutTour .tourDetails .details {
+    font-size: 14px
+}
+.modalDiv .modalcontent .modalbody .aboutTour .heading {
+    width: 100%;
+    font-size: 24px;
+    margin-top: 4%
+}
+.modalDiv .modalcontent .modalbody .aboutTour .daysdetails {
+    margin-top: 4%;
+    width: 100%
+}
+.modalDiv .modalcontent .modalbody .aboutTour .daysdetails .days {
+    margin-top: 2.5%;
+    font-size: 24px;
+    width: 13%;
+    float: left;
+    font-weight: 600
+}
+.modalDiv .modalcontent .modalbody .aboutTour .daysdetails .daydescripion {
+    margin-top: 2.5%;
+    font-size: 16px;
+    width: 87%;
+    float: left;
+    padding-top: 1%
+}
+.printButton {
+    width: 50%;
+    margin-left: 25%;
+    margin-top: 1%;
+    border: 0;
+    background-color: #FF6600;
+    color: white;
+    border-radius: 7px;
+    line-height: 2em;
+    float: left;
+    outline: none
+}
+@media (min-width: 1755px) and (max-width: 2140px) {
+    .modalDiv .modalcontent {
+        width: 50%;
+        left: 25%
+    }
+}

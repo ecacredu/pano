@@ -27,7 +27,7 @@
 
 				<table>
 						<tbody>
-							<tr *ngFor="let e of allCords | search:customSearch">
+							<tr *ngFor="let e of allCords | searchEmp:customSearch">
 								<td class="col-xs-2">{{e.text}}</td>
 								<td class="col-xs-4">{{e.designation}}</td>
 								<td class="col-xs-2">{{e.mobile_number}}</td>
@@ -54,7 +54,7 @@
 							<h4 class="modal-title">ADD USER</h4>
 						</div>
 						<div class="modal-body modalBody">
-							<form class="" (ngSubmit)="onAddUserSubmit(addUserForm.value)" [formGroup]="addUserForm">
+							<form class="" (ngSubmit)="onAddUserSubmit()" [formGroup]="addUserForm">
 
 							<hr class="style_2">
 							<div class="row formrow2">

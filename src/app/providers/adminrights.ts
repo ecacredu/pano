@@ -5,20 +5,23 @@ import { Headers, Response, RequestOptions, Http } from '@angular/http';
 import { TransferHttp } from '../../modules/transfer-http/transfer-http';
 import 'rxjs/Rx';
 import { Observable } from "rxjs/Observable";
+import { UserService } from './userservice';
 
 @Injectable()
 export class AdminService {
 
     public AllUsers: any = [];
     public AllInvoices: any = [];
+    public AllInvoicesByUser: any = [];
     public AllCords: any = [];
-    public path: string = "http://www.acecosmos.com/panorama/rest/";
+    public path: string = "http://www.panoramaclubholidays.com/manage/rest/";
     public offermilage: any = {};
+
 
     public invoiceDetails: any = { total: 0, cost: 0, redeemed: 0, cancelled: 0 };
     public userDetails: any = { total: 0, balance: 0, float: 0 };
 
-    constructor(public storage: LocalStorageService, private _http: Http, public sessionstorage: SessionStorageService, private ss: SecureService) {
+    constructor(public storage: LocalStorageService, private _http: Http, public sessionstorage: SessionStorageService, private us: UserService, private ss: SecureService) {
 
 
     }
@@ -36,10 +39,10 @@ export class AdminService {
         return this._http.post(this.path + 'user/register', formData, options)
             .map((result: Response) => {
                 const datai = result.json();
-                console.log(JSON.stringify(datai));
+                // console.log(JSON.stringify(datai));
                 return { success: true, data: datai };
             }, err => {
-                console.log(err);
+                // console.log(err);
                 return { success: false, data: err };
             });
 
@@ -55,12 +58,16 @@ export class AdminService {
         return this._http.post(this.path + 'node', formData, options)
             .map((result: Response) => {
                 const datai = result.json();
-                console.log(JSON.stringify(datai));
+                // console.log(JSON.stringify(datai));
                 return { success: true, data: datai };
             }, err => {
                 return { success: false, data: err };
             });
 
+    }
+
+    getCurrentUser() {
+        return this.storage.retrieve('activeUser');
     }
 
     getAllUsers() {
@@ -109,7 +116,20 @@ export class AdminService {
     }
 
     retrieveOfferMilage() {
-        return this.offermilage;
+        return this.offermilage.percent;
+    }
+
+    retrieveOfferMilageAccordingToType(type: any) {
+        console.log('retrieve Milage Funtion ' + type);
+        if (type == "Hotel") {
+            return this.offermilage.percent_hotel;
+        }
+        else if (type == "Package") {
+            return this.offermilage.percent_package;
+        }
+        else {
+            return this.offermilage.percent;
+        }
     }
 
     retrieveCords() {
@@ -160,16 +180,27 @@ export class AdminService {
         }
     }
 
-    getAllInvoices() {
+    getAllInvoices(user?) {
         const headers = new Headers({ 'Content-Type': 'application/json' });
         this.ss.createAuthorizationHeader(headers);
         let options = new RequestOptions({ headers: headers });
 
-        return this._http.get(this.path + 'invoice', options)
+        let url = this.path + 'invoice';
+
+        if (user) {
+            url = this.path + 'invoice?args[0]=all&args[1]=all&args[2]=' + user;
+        }
+
+        return this._http.get(url, options)
             .map((result: Response) => {
                 const datai = result.json();
-                this.AllInvoices = datai;
-                return 'ok';
+                if (user) {
+                    this.AllInvoicesByUser = datai;
+                    return datai;
+                } else {
+                    this.AllInvoices = datai;
+                    return 'ok';
+                }
             }, err => {
                 return { success: false, data: err };
             });
@@ -238,14 +269,14 @@ export class AdminService {
         return this._http.post(this.path + 'file', formData, options)
             .map((result: Response) => {
                 const datai = result.json();
-                console.log(JSON.stringify(result));
+                // console.log(JSON.stringify(result));
                 return { success: result.ok, status: result.status, data: datai };
             }, err => {
                 return { success: false, data: err };
             });
     }
 
-    deleteNode(nodeID: string) {
+    deleteNode(nodeID: string, type: any) {
 
         const headers = new Headers({ 'Content-Type': 'application/json' });
         this.ss.createAuthorizationHeader(headers);
@@ -257,8 +288,46 @@ export class AdminService {
                 const data = result.json();
                 return 'ok';
             }, err => {
-                console.log(err);
+                // console.log(err);
             });
+
+    }
+
+    deleteInvoice(nodeID: string, type: any) {
+
+        let statementsLength = 0;
+        let tempStatements = [];
+
+        var promise = new Promise((resolve, reject) => {
+
+            this.us.getStatements(nodeID, "fromInvoiceID").subscribe((res) => {
+
+                tempStatements = res['data'];
+                if (tempStatements != null && tempStatements.length) {
+                    tempStatements.forEach(element => {
+                        // console.log("State delete :"+element.againstid+" == "+nodeID)
+                        if (element.againstid == nodeID) {
+                            this.deleteNode(element.nid, "fromDeleteInvoice").subscribe(() => {
+                                statementsLength++;
+                                if (statementsLength == tempStatements.length) {
+                                    this.deleteNode(nodeID, "fromInvoiceDelete").subscribe(res => {
+                                        resolve('ok');
+                                    });
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    this.deleteNode(nodeID, "fromInvoiceDelete").subscribe(res => {
+                        resolve('ok');
+                    });
+
+                }
+            });
+
+
+        })
+        return promise;
 
     }
 
@@ -273,20 +342,42 @@ export class AdminService {
                 const data = result.json();
                 return data;
             }, err => {
-                console.log(err);
+                // console.log(err);
             });
     }
 
-    updateMilage(value: any) {
+    updateMilage(value: any, type: any) {
         const headers = new Headers({ 'Content-Type': 'application/json' });
         this.ss.createAuthorizationHeader(headers);
-        let formData = {
-            field_milage_percent: {
-                "und": [
-                    { "value": value }
-                ]
-            }
-        };
+
+        let formData;
+        if (type == "Normal") {
+            formData = {
+                field_milage_percent: {
+                    "und": [
+                        { "value": value }
+                    ]
+                }
+            };
+        }
+        if (type == "Hotel") {
+            formData = {
+                field_milage_percent_hotel: {
+                    "und": [
+                        { "value": value }
+                    ]
+                }
+            };
+        }
+        if (type == "Package") {
+            formData = {
+                field_milage_percent_package: {
+                    "und": [
+                        { "value": value }
+                    ]
+                }
+            };
+        }
 
         let options = new RequestOptions({ headers: headers });
 
@@ -295,7 +386,7 @@ export class AdminService {
                 const datai = result.json();
                 return { status: result.status, data: datai };
             }, err => {
-                console.log(err);
+                // console.log(err);
             });
     }
 
@@ -353,10 +444,10 @@ export class AdminService {
         return this._http.post(this.path + 'node', formData, options)
             .map((result: Response) => {
                 const data = result.json();
-                console.log(JSON.stringify(data));
+                // console.log(JSON.stringify(data));
                 return 'ok';
             }, err => {
-                console.log(err);
+                // console.log(err);
             });
     }
 
@@ -377,23 +468,25 @@ export class AdminService {
     }
 
     totalInCost() {
-        let cost: number = 0;
+        let cost: any = 0;
+
         for (var i = 0; i < this.AllInvoices.length; i++) {
-            cost = cost + Number(this.AllInvoices[i]['net_invoice_amount']);
+            // console.log("Invoices : "+this.AllInvoices.length+" String cost :"+this.AllInvoices[i]['net_invoice_amount']+" COST:  "+parseFloat(this.AllInvoices[i]['net_invoice_amount'].replace(/,/g, '')));
+            cost = cost + parseFloat(this.AllInvoices[i]['net_invoice_amount'].replace(/,/g, ''));
         }
         return cost;
     }
 
     totalInRedeem(key: string) {
-        let redeem: number = 0;
+        let redeem: any = 0;
         for (var i = 0; i < this.AllUsers.length; i++) {
-            redeem += Number(this.AllUsers[i][key]);
+            redeem += parseFloat(this.AllUsers[i][key].replace(/,/g, ''));
         }
         return redeem;
     }
 
     totalInCancelled() {
-        let cancelled: number = 0;
+        let cancelled: any = 0;
         for (var i = 0; i < this.AllInvoices.length; i++) {
             if (this.AllInvoices[i].status == 'Cancelled') {
                 cancelled++;
@@ -414,7 +507,7 @@ export class AdminService {
                 const datai = result.json();
                 return { status: result.status, data: datai };
             }, err => {
-                console.log(err);
+                // console.log(err);
             });
     }
 
@@ -446,7 +539,7 @@ export class AdminService {
                 const datai = result.json();
                 return { status: result.status, data: datai };
             }, err => {
-                console.log(err);
+                // console.log(err);
             });
     }
 

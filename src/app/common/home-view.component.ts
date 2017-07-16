@@ -7,6 +7,7 @@ import { SecureService } from '../providers/secureservice';
 import { UserService } from '../providers/userservice';
 declare var jQuery: any;
 declare var navline:any;
+declare var google:any;
 
 @Component({
   selector: 'home-view',
@@ -57,12 +58,12 @@ export class HomeView implements OnInit {
 
 
     // this.dataService.getData();
-    // 				var mapProp = {
-    // center:new google.maps.LatLng(51.508742,-0.120850),
-    // zoom:5,
-    // mapTypeId:google.maps.MapTypeId.ROADMAP
-    // };
-    // var map=new google.maps.Map(document.getElementById("googleMap"), mapProp);
+    				var mapProp = {
+    center:new google.maps.LatLng(51.508742,-0.120850),
+    zoom:5,
+    mapTypeId:google.maps.MapTypeId.ROADMAP
+    };
+    var map=new google.maps.Map(document.getElementById("googleMap"), mapProp);
 
 
 

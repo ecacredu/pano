@@ -21,11 +21,11 @@ export class UserStateComponent {
 
     this.activeUser = this.storage.retrieve('activeUser');
     if (this.us.maskUser.id == undefined) {
-      this.us.getStatements(this.activeUser.uid).subscribe((res) => {
+      this.us.getStatements(this.activeUser.uid,"fromStateMents").subscribe((res) => {
         this.allStatements = res.data;
       });
     } else {
-      this.us.getStatements(this.us.maskUser.id).subscribe((res) => {
+      this.us.getStatements(this.us.maskUser.id,"fromStateMents").subscribe((res) => {
         this.allStatements = res.data;
       });
     }

@@ -74,6 +74,12 @@ export class AdminComponent {
 		this.adService.getAllInvoices().subscribe((res) => { });
 	}
 
+	getPaddedUnique(a){
+		var pad = "0000"
+		var ans = pad.substring(0, pad.length - a.length) + a
+		return "PCH"+ans;
+	}
+
 	onChange(data) {
 		var files = data.target.files;
 		console.log(files);

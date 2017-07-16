@@ -20,6 +20,7 @@
   </div>
   <div class="topMenu">
 		<div class="buttons">
+			<p style="display:inline-block;margin-right:10px;" *ngIf="adminMask && maskDetails.id != undefined">{{getPaddedUnique(maskDetails.unique)}}</p>
 			<button class="myaccount" [routerLink]="['/admin/account']"  type="button" name="button">Admin account</button>
 			<button class="logout" type="button" (click)="logmeout()" name="button">Log Out</button>
 		</div>

@@ -92,7 +92,7 @@ export class AdminOfferComponent {
       field_boost_type: { und: [(type == 'Yes' ? 'All' : 'Individual')] },
       field_contact_type: { und: ['SMS'] }
     };
-    console.log(JSON.stringify(form));
+    // console.log(JSON.stringify(form));
     this.adService.sendOfferNoti(form).subscribe((res) => {
       if (res.status == 200) {
         this.toastyService.clear(this.waitToastID);
@@ -127,7 +127,7 @@ export class AdminOfferComponent {
       theme: 'default',
       timeout: timeout,
       onAdd: (toast: ToastData) => {
-        console.log('Toast ' + toast.id + ' has been added!');
+        // console.log('Toast ' + toast.id + ' has been added!');
         if (type == 'wait') {
           this.waitToastID = toast.id;
         } else if (type == 'success') {
@@ -138,7 +138,7 @@ export class AdminOfferComponent {
 
       },
       onRemove: function (toast: ToastData) {
-        console.log('Toast ' + toast.id + ' has been removed!');
+        // console.log('Toast ' + toast.id + ' has been removed!');
         if (type == 'wait') {
           this.waitToastID = null;
         } else if (type == 'success') {

@@ -1,0 +1,130 @@
+<div class="container-fluid fullPage">
+<div class="banner">
+<div class="circlediv">
+	<img src="assets/circles/INTERNATIONAL.png" alt="" />
+	<input class="textfield" [(ngModel)]="customSearch" type="text" placeholder="Search">
+</div>
+</div>
+<div class="grouptours">
+	<div class="title" *ngIf="toShowTitle('Group')">
+		<hr class="style">
+	</div>
+
+	<div class="grid">
+
+			<div class="row grouptoursgrid">
+				<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 tours" *ngFor="let in of allInters | packagetype:'Group'   | packageSearch:customSearch" (click)="openModal(in)">
+					<div class="singletour">
+						<img src="{{in.big_image_small}}" alt="" />
+						<div class="blackStrip">
+							<p>
+								{{in.title}}
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+	</div>
+
+
+</div>
+<div class="fixedtours">
+	<div class="title" *ngIf="toShowTitle('Fixed')">
+		<hr class="style">
+	</div>
+
+	<div class="grid">
+
+			<div class="row grouptoursgrid">
+				<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 tours" *ngFor="let in of allInters | packagetype:'Fixed'  | packageSearch:customSearch" (click)="openModal(in)">
+					<div class="singlefixedtour">
+						<img src="{{in.big_image_small}}" alt="" />
+						<div class="blackStrip">
+							<p>
+								{{in.title}}
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+	</div>
+
+</div>
+
+<div class="fixedtours customtours">
+	<div class="title" *ngIf="toShowTitle('Custom')">
+		<hr class="style">
+	</div>
+
+	<div class="grid">
+
+			<div class="row grouptoursgrid">
+				<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 tours" *ngFor="let in of allInters | packagetype:'Custom'  | packageSearch:customSearch" (click)="openModal(in)">
+					<div class="singlefixedtour">
+						<img src="{{in.big_image_small}}" alt="" />
+						<div class="blackStrip">
+							<p>
+								{{in.title}}
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+	</div>
+
+</div>
+
+<div class="fixedtours tailoredtours">
+	<div class="title" *ngIf="toShowTitle('Tailored')">
+		<hr class="style">
+	</div>
+
+	<div class="grid">
+
+			<div class="row grouptoursgrid">
+				<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 tours" *ngFor="let in of allInters | packagetype:'Tailored'  | packageSearch:customSearch" (click)="openModal(in)">
+					<div class="singlefixedtour">
+						<img src="{{in.big_image_small}}" alt="" />
+						<div class="blackStrip">
+							<p>
+								{{in.title}}
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+	</div>
+
+</div>
+
+</div>
+<div bsModal #lgModal="bs-modal" class="modal fade modalDiv" id="myModal"tabindex="-1" role="dialog" aria-hidden="true">
+		<!-- Modal content-->
+      <div class="modal-content modalcontent"  id="tourmodal">
+
+					<button type="button" class="close closeButton" (click)="lgModal.hide()">&times;</button>
+					<div class="modal-body modalbody">
+							<div class="tourImage">
+								<img src="{{currentTour.big_image}}" alt="" />
+							</div>
+							<div class="aboutTour">
+								<div class="tourDetails">
+			          	<h1 class="heading">Tour Details</h1>
+									<h1 class="description">{{currentTour.description}}</h1>
+									<h1 class="details">{{currentTour.tour_details}}</h1>
+			          </div>
+								<h1 class="heading">Itinerary</h1>
+								<div class="daysdetails" *ngFor="let it of currentTour.itinerary">
+									<p class="days">{{it.Day['#markup']}}:</p><p class="daydescripion">{{it.Description['#markup']}}</p>
+
+								</div>
+							</div>
+								<button class="printButton" (click)="printStatement()" type="button" name="button">Print tour details.</button>
+        </div>
+
+      </div>
+  </div>

@@ -19,8 +19,8 @@ max-width: 50px;">
 			<table class="table heading">
 				<thead>
 					<tr>
-						<th class="col-xs-1">U.No</th>
-						<th class="col-xs-4">A/C NAME</th>
+						<th class="col-xs-2">U.No</th>
+						<th class="col-xs-3">A/C NAME</th>
 						<th class="col-xs-2">TOTAL POINTS</th>
 						<th class="col-xs-1">REDEEMED</th>
 						<th class="col-xs-1">CLAIMED</th>
@@ -35,10 +35,10 @@ max-width: 50px;">
 
 					<table>
 							<tbody>
-								<tr *ngFor="let user of AllUsers | search:customSearch">
-									<td class="col-xs-1">{{user.unique}}</td>
-									<td class="col-xs-4">{{user.name}}</td>
-									<td class="col-xs-2">{{user.balance}}</td>
+								<tr *ngFor="let user of AllUsers | normalSearch:customSearch">
+									<td class="col-xs-2">{{getPaddedUnique(user.unique)}}</td>
+									<td class="col-xs-3">{{user.name}}</td>
+									<td class="col-xs-2">{{getTotalPnts(user.float,user.balance)}}</td>
 									<td class="col-xs-1">{{user.redeemed}}</td>
 									<td class="col-xs-1">{{user.float}}</td>
 									<td class="col-xs-1">{{user.balance}}</td>
@@ -81,7 +81,7 @@ max-width: 50px;">
 				          <h4 class="modal-title">ADD USER</h4>
 				        </div>
 				        <div class="modal-body modalBody">
-									<form class="" (ngSubmit)="onAddUserSubmit(addUserForm.value)" [formGroup]="addUserForm">
+									<form class="" (ngSubmit)="onAddUserSubmit()" [formGroup]="addUserForm">
 										<hr class="style">
 									<div class="row formrow">
 

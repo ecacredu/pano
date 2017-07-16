@@ -40,6 +40,10 @@ export class UserEmployeesComponent {
   public spousename: any = '';
   public designation: any = '';
 
+  public role: string = '4';
+
+  public disabled=false;
+
   addUserForm: FormGroup;
   public activeUser: any;
   public customSearch: string = "";
@@ -47,8 +51,8 @@ export class UserEmployeesComponent {
 
   public dt: Date = new Date();
   public Bdt: Date = new Date();
-  private showWedDatePicker: boolean = false;
-  private showBirthDatePicker: boolean = false;
+  public showWedDatePicker: boolean = false;
+  public showBirthDatePicker: boolean = false;
   public maritalstatus: string = 'Unmarried';
 
   public wedDay: string = ''; public wedMonth: string = ''; public wedYear: string = '';
@@ -123,6 +127,14 @@ export class UserEmployeesComponent {
   constructor(public swalService: SweetAlertService, public element: ElementRef, public storage: LocalStorageService, private us: UserService, private toastyService: ToastyService, private _formBuilder: FormBuilder) {
 
     this.activeUser = this.storage.retrieve('activeUser');
+
+    // var array = this.activeUser.roles.split(',');
+
+    if(this.activeUser.roles.hasOwnProperty("4")){
+        this.role='4';
+    }else if(this.activeUser.roles.hasOwnProperty("5")){
+        this.role='5';
+    }
 
     if (this.us.maskUser.id == undefined) {
       this.us.getEmployees(this.activeUser.uid).subscribe((res) => {
@@ -252,29 +264,29 @@ export class UserEmployeesComponent {
   }
 
   isPassSame(control: any, pass: string): { [s: string]: boolean } {
-    console.log(control.value);
-    console.log(control.value);
+    // console.log(control.value);
+    // console.log(control.value);
     return { isPassSame: true };
   }
 
-  private isEmail(control: any): { [s: string]: boolean } {
+  isEmail(control: any): { [s: string]: boolean } {
     if (!control.value.match("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")) {
       return { invalidMail: true };
     }
   }
 
-  private isContact(control: any): { [s: string]: boolean } {
+  isContact(control: any): { [s: string]: boolean } {
     if (!control.value.match("^[0-9]{1,12}$")) {
       return { invalidContact: true };
     }
   }
 
 
-  private toggleStartDatePicker(): void {
+  toggleStartDatePicker(): void {
     this.showWedDatePicker = !this.showWedDatePicker;
   }
 
-  private toggleBirthDatePicker(): void {
+  toggleBirthDatePicker(): void {
     this.showBirthDatePicker = !this.showBirthDatePicker;
   }
 
@@ -356,7 +368,7 @@ export class UserEmployeesComponent {
       }
     };
 
-    console.log(JSON.stringify(this.newCoordinatorForm));
+    // console.log(JSON.stringify(this.newCoordinatorForm));
 
     if (this.updateIn == true) {
       this.addToast('wait', 'Updating Co-ordinator', 'Updating Co-Ordinator account.', 40000);
@@ -440,7 +452,7 @@ export class UserEmployeesComponent {
   }
 
   public selected(value: any, type: string): void {
-    console.log('Selected value is: ', value);
+    // console.log('Selected value is: ', value);
     if (type == 'state') {
       this.addState = value.text;
     } else if (type == 'city') {
@@ -500,7 +512,7 @@ export class UserEmployeesComponent {
       theme: 'default',
       timeout: timeout,
       onAdd: (toast: ToastData) => {
-        console.log('Toast ' + toast.id + ' has been added!');
+        // console.log('Toast ' + toast.id + ' has been added!');
         if (type == 'wait') {
           this.waitToastID = toast.id;
         } else if (type == 'success') {
@@ -511,7 +523,7 @@ export class UserEmployeesComponent {
 
       },
       onRemove: function (toast: ToastData) {
-        console.log('Toast ' + toast.id + ' has been removed!');
+        // console.log('Toast ' + toast.id + ' has been removed!');
         if (type == 'wait') {
           this.waitToastID = null;
         } else if (type == 'success') {

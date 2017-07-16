@@ -32,7 +32,7 @@
 
 			<table>
 					<tbody>
-						<tr *ngFor="let invoice of AllInvoices | search:customSearch">
+						<tr *ngFor="let invoice of AllInvoices | searchInvoice:customSearch">
 							<td class="col-xs-1">{{invoice.title}}</td>
 							<td class="col-xs-1">{{invoice.booked_by}}</td>
 							<td class="col-xs-3">{{invoice.description}}</td>
@@ -55,13 +55,13 @@
 					<span class="leftText">TOTAL INVOICES:</span><br>
 					<span class="leftText">TOTAL INVOICE COST:</span><br>
 					<span class="leftText">TOTAL REDEEMED:</span><br>
-					<span class="leftText">TOTAL CANCELLED:</span><br>
+					<!--<span class="leftText">TOTAL CANCELLED:</span><br>-->
 				</div>
 				<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 value">
 					<span class="rightText">{{invoiceInfo.total || 0}}</span><br>
 					<span class="rightText">{{invoiceInfo.cost || 0}}</span><br>
 					<span class="rightText">{{invoiceInfo.redeemed || 0}}</span><br>
-					<span class="rightText">{{invoiceInfo.cancelled || 0}}</span><br>
+					<!--<span class="rightText">{{invoiceInfo.cancelled || 0}}</span><br>-->
 				</div>
 
 			</div>
@@ -85,7 +85,7 @@
 											<p class="labels">
 												STATUS
 											</p>
-											<ng-select  [allowClear]="false"
+											<ng-select #statusselect [allowClear]="false"
 											            [items]="status"
 																	[active]="[status[0]]"
 											              (selected)="selected($event,'status')"
@@ -114,14 +114,24 @@
 										</div>
 										<div class="col-lg-6 col-sm-6 col-md-6 col-xs-6 rightcol">
 											<p class="labels">
+												FOR
+											</p>
+											<ng-select #forselect [allowClear]="false"
+											            [items]="bookingfor"
+											              (selected)="selected($event,'bookingfor')"
+											              (removed)="removed($event,'bookingfor')"
+											            [disabled]="false"
+											            placeholder="Journey for">
+											</ng-select>
+											<p  *ngIf="fromTrue" class="labels">
 												FROM
 											</p>
-											<input class="inputtext" [(ngModel)]="from" [ngModelOptions]="{standalone: true}" type="text" value="">
+											<input *ngIf="fromTrue"  class="inputtext" [(ngModel)]="from" [ngModelOptions]="{standalone: true}" type="text" value="">
 											<!-- <p class="error" *ngIf="addInvoiceForm.controls.from.touched && !addInvoiceForm.controls.from.valid">
 									      * Field required
 									    </p> -->
-											<p class="labels lp">
-												TO
+											<p  class="labels lp">
+												{{ fromTrue? 'TO':'DESTINATION' }}
 											</p>
 											<input class="inputtext" [(ngModel)]="to" [ngModelOptions]="{standalone: true}" type="text" value="">
 											<!-- <p class="error" *ngIf="addInvoiceForm.controls.to.touched && !addInvoiceForm.controls.to.valid">
@@ -134,16 +144,7 @@
 									    <div *ngIf="showOnDatePicker && onDate" class= "datepicker">
 									      <datepicker [(ngModel)]="onDate" (ngModelChange)="onDateChange($event)" [ngModelOptions]="{standalone: true}" [showWeeks]="true"></datepicker>
 									    </div>
-											<p class="labels lp">
-												FOR
-											</p>
-											<ng-select #forselect [allowClear]="false"
-											            [items]="bookingfor"
-											              (selected)="selected($event,'bookingfor')"
-											              (removed)="removed($event,'bookingfor')"
-											            [disabled]="false"
-											            placeholder="Journey for">
-											</ng-select>
+											
 											<p class="labels lp">
 												SEATS
 											</p>

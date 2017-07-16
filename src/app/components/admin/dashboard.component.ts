@@ -15,6 +15,8 @@ export class AdminDashboardComponent{
 
     public milage:any;
     public newmilage:any;
+    public newHotelmilage:any;
+    public newPackagemilage:any;
     public waitToastID:any;
     public successToastID:any;
     public errorToastID:any;
@@ -34,9 +36,9 @@ export class AdminDashboardComponent{
       this.userInfo=this.adService.refreshUserDetails();
     }
 
-    updateMil(mil : any){
+    updateMil(mil : any, type:String){
       this.addToast('wait','Updating !','Updating Milage.', 50000);
-      this.adService.updateMilage(mil).subscribe((res)=>{
+      this.adService.updateMilage(mil,type).subscribe((res)=>{
         if(res.status==200){
           this.newmilage=null;
           this.toastyService.clear(this.waitToastID);

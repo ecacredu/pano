@@ -19,6 +19,7 @@ import { SearchEmpPipe } from './pipes/searchemployee-pipe';
 import { SearchInvoicePipe } from './pipes/searchinvoice-pipe';
 import { SearchPackagePipe } from './pipes/searchpackage-pipe';
 import { SearchStatePipe } from './pipes/searchstatement-pipe';
+import { PackageTypePipe } from './pipes/packagetype-pipe';
 import { SweetAlertService } from 'ng2-sweetalert2';
 
 const MODULES = [
@@ -37,7 +38,8 @@ const PIPES = [
     SearchEmpPipe,
     SearchInvoicePipe,
     SearchPackagePipe,
-    SearchStatePipe
+    SearchStatePipe,
+    PackageTypePipe
 ];
 
 const COMPONENTS = [
